@@ -46,33 +46,59 @@ skills/swift-comments-that-matter/         # Cursor compatibility layer
 2. Pick your adapter in `adapters/` based on your assistant.
 3. Use `skills/swift-comments-that-matter/` only for Cursor compatibility.
 
-## Installation By Tool
+## Install by environment
 
-### Cursor
+### Option A: skills.sh CLI
 
-1. Keep this repository cloned locally.
-2. Use `skills/swift-comments-that-matter/` as the Cursor-compatible skill package.
-3. Ask your agent to apply `swift-comments-that-matter` when reviewing or rewriting Swift comments.
+Install from GitHub with `skills`:
 
-### Claude
+```bash
+npx skills add rgmez/swift-comments-that-matter@swift-comments-that-matter
+```
 
-1. Open `adapters/claude/CLAUDE.md`.
-2. Apply the rules in that adapter plus `standards/swift-comments-that-matter/STANDARD.md`.
-3. Use the docs/examples references for deep guidance.
+Useful commands:
 
-### Codex
+```bash
+# List skills available in this repo
+npx skills list rgmez/swift-comments-that-matter
 
-1. Open `adapters/codex/AGENTS.md`.
-2. Apply its operational rules with the canonical standard.
-3. Use scenario files in `standards/swift-comments-that-matter/examples/` to drive no/bad/good/best rewrites.
+# List installed skills
+npx skills list
 
-## How To Verify Installation
+# Update installed skills
+npx skills update
+```
 
-- The assistant cites or follows:
-  - `standards/swift-comments-that-matter/STANDARD.md`
-  - one adapter file under `adapters/`
-- Output respects refactor-first and avoids generic intros.
-- Rewrites include constraints, risks, or invariants where relevant.
+### Option B: Cursor (manual local install)
+
+1. Clone this repository locally.
+2. Use `skills/swift-comments-that-matter/` as the Cursor-compatible package.
+3. Ask Cursor to apply `swift-comments-that-matter` when reviewing or rewriting comments.
+
+Suggested prompt:
+
+> "Use swift-comments-that-matter to audit these Swift comments and rewrite only low-signal ones."
+
+### Option C: Claude / Codex (adapter-guided)
+
+Use adapter docs for tool-specific framing:
+- `adapters/claude/CLAUDE.md`
+- `adapters/codex/AGENTS.md`
+- `adapters/cursor/README.md`
+
+Then follow the canonical standard:
+- `standards/swift-comments-that-matter/STANDARD.md`
+
+## Verification after install
+
+Run one smoke prompt and confirm response shape:
+
+> "Review these Swift comments with swift-comments-that-matter. Return no/bad/good/best rewrites and explain what must not break."
+
+Expected:
+- uses refactor-first reasoning before adding comments
+- avoids generic intros like "This function..."
+- includes constraints, risks, side effects, or invariants where relevant
 
 ## Tone And Guardrails
 

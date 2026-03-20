@@ -81,6 +81,11 @@ skills/swift-comments-that-matter/         # Cursor compatibility layer
 - No generic intros like "This function..."
 - Keep comments short and specific
 
+## Releases
+
+- Changelog: `CHANGELOG.md`
+- Release template: `.github/RELEASE_TEMPLATE.md`
+
 ## License
 
 MIT. See `LICENSE`.

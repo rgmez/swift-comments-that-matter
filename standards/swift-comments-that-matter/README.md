@@ -13,10 +13,9 @@ This folder is the source of truth for:
 
 - `STANDARD.md`
 
-## Current Source References
+## Canonical Contents
 
-The operational reference materials currently live in:
-- `skills/swift-comments-that-matter/docs/`
-- `skills/swift-comments-that-matter/examples/`
+- `docs/`
+- `examples/`
 
-The `skills/` path remains as a compatibility layer for Cursor.
+The `skills/` path remains as a compatibility layer for Cursor packaging.

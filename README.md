@@ -64,7 +64,7 @@ skills/swift-comments-that-matter/         # Cursor compatibility layer
 
 1. Open `adapters/codex/AGENTS.md`.
 2. Apply its operational rules with the canonical standard.
-3. Use scenario files in `examples/` to drive no/bad/good/best rewrites.
+3. Use scenario files in `standards/swift-comments-that-matter/examples/` to drive no/bad/good/best rewrites.
 
 ## How To Verify Installation
 

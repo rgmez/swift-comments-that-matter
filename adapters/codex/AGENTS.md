@@ -15,8 +15,8 @@ Canonical source:
 
 ## Deep References
 
-- `skills/swift-comments-that-matter/docs/`
-- `skills/swift-comments-that-matter/examples/`
+- `standards/swift-comments-that-matter/docs/`
+- `standards/swift-comments-that-matter/examples/`
 
 ## Quick Prompt
 

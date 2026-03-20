@@ -94,18 +94,18 @@ Use DocC articles for:
 
 ## Detailed References
 
-- `skills/swift-comments-that-matter/docs/context.md`
-- `skills/swift-comments-that-matter/docs/principles.md`
-- `skills/swift-comments-that-matter/docs/decision-rules.md`
-- `skills/swift-comments-that-matter/docs/checklist.md`
-- `skills/swift-comments-that-matter/docs/example-constraints.md`
-- `skills/swift-comments-that-matter/docs/golden-examples.md`
-- `skills/swift-comments-that-matter/docs/docc-guidance.md`
+- `standards/swift-comments-that-matter/docs/context.md`
+- `standards/swift-comments-that-matter/docs/principles.md`
+- `standards/swift-comments-that-matter/docs/decision-rules.md`
+- `standards/swift-comments-that-matter/docs/checklist.md`
+- `standards/swift-comments-that-matter/docs/example-constraints.md`
+- `standards/swift-comments-that-matter/docs/golden-examples.md`
+- `standards/swift-comments-that-matter/docs/docc-guidance.md`
 
 ## Examples
 
-- `skills/swift-comments-that-matter/examples/bad-comments.swift`
-- `skills/swift-comments-that-matter/examples/better-comments.swift`
-- `skills/swift-comments-that-matter/examples/concurrency.swift`
-- `skills/swift-comments-that-matter/examples/invariants.swift`
-- `skills/swift-comments-that-matter/examples/api-contracts.swift`
+- `standards/swift-comments-that-matter/examples/bad-comments.swift`
+- `standards/swift-comments-that-matter/examples/better-comments.swift`
+- `standards/swift-comments-that-matter/examples/concurrency.swift`
+- `standards/swift-comments-that-matter/examples/invariants.swift`
+- `standards/swift-comments-that-matter/examples/api-contracts.swift`

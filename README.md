@@ -1,6 +1,6 @@
 # swift-comments-that-matter
 
-A practical Cursor skill for writing high-value comments in Swift codebases.
+A cross-agent standard for writing high-value comments in Swift codebases.
 
 This project helps developers and AI assistants document what actually matters:
 - why code exists
@@ -13,16 +13,17 @@ If it explains risk, intent, or contracts, keep the comment.
 ## Repository Contents
 
 ```text
-skills/swift-comments-that-matter/
-  SKILL.md
-  README.md
-  examples/
-  docs/
+standards/swift-comments-that-matter/      # canonical standard
+adapters/cursor/                           # Cursor adapter
+adapters/claude/                           # Claude adapter
+adapters/codex/                            # Codex adapter
+skills/swift-comments-that-matter/         # Cursor compatibility layer
 ```
 
 ## What You Get
 
-- A production-oriented `SKILL.md` with strict routing and guardrails
+- A canonical agent-agnostic standard
+- Adapter entrypoints for Cursor, Claude, and Codex
 - Realistic Swift examples (no-comment, bad, good, best)
 - Decision rules and refactor-first guidance
 - Review checklist with a simple scoring rubric
@@ -41,10 +42,9 @@ skills/swift-comments-that-matter/
 
 ## How To Use
 
-1. Open `skills/swift-comments-that-matter/SKILL.md`.
-2. Follow the decision flow and refactor-first rule.
-3. Use `docs/checklist.md` to score and review output quality.
-4. Use `examples/` as reference patterns for rewrite quality.
+1. Start with `standards/swift-comments-that-matter/STANDARD.md`.
+2. Pick your adapter in `adapters/` based on your assistant.
+3. Use `skills/swift-comments-that-matter/` only for Cursor compatibility.
 
 ## Tone And Guardrails
 

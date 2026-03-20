@@ -5,6 +5,9 @@ description: Write high-value Swift comments that explain intent, invariants, co
 
 # Swift Comments That Matter
 
+Compatibility note: this `SKILL.md` is the Cursor adapter entrypoint.
+Canonical standard lives at `standards/swift-comments-that-matter/STANDARD.md`.
+
 ## Purpose
 
 Use this skill to produce comments that help future maintainers make safe changes.

@@ -2,6 +2,9 @@
 
 A reusable skill for writing high-signal Swift comments in production Apple-platform codebases.
 
+Compatibility note: this folder is the Cursor-compatible packaging layer.
+Canonical standard lives at `standards/swift-comments-that-matter/STANDARD.md`.
+
 ## What This Skill Optimizes
 
 - intent over implementation narration

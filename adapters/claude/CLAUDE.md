@@ -15,3 +15,7 @@ Apply the canonical standard from:
 
 - `skills/swift-comments-that-matter/docs/`
 - `skills/swift-comments-that-matter/examples/`
+
+## Quick Prompt
+
+"Use swift-comments-that-matter to transform these comments from no/bad/good/best and explain what must not break."

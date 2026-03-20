@@ -46,6 +46,34 @@ skills/swift-comments-that-matter/         # Cursor compatibility layer
 2. Pick your adapter in `adapters/` based on your assistant.
 3. Use `skills/swift-comments-that-matter/` only for Cursor compatibility.
 
+## Installation By Tool
+
+### Cursor
+
+1. Keep this repository cloned locally.
+2. Use `skills/swift-comments-that-matter/` as the Cursor-compatible skill package.
+3. Ask your agent to apply `swift-comments-that-matter` when reviewing or rewriting Swift comments.
+
+### Claude
+
+1. Open `adapters/claude/CLAUDE.md`.
+2. Apply the rules in that adapter plus `standards/swift-comments-that-matter/STANDARD.md`.
+3. Use the docs/examples references for deep guidance.
+
+### Codex
+
+1. Open `adapters/codex/AGENTS.md`.
+2. Apply its operational rules with the canonical standard.
+3. Use scenario files in `examples/` to drive no/bad/good/best rewrites.
+
+## How To Verify Installation
+
+- The assistant cites or follows:
+  - `standards/swift-comments-that-matter/STANDARD.md`
+  - one adapter file under `adapters/`
+- Output respects refactor-first and avoids generic intros.
+- Rewrites include constraints, risks, or invariants where relevant.
+
 ## Tone And Guardrails
 
 - Human, direct, engineer-to-engineer
@@ -55,4 +83,4 @@ skills/swift-comments-that-matter/         # Cursor compatibility layer
 
 ## License
 
-No license specified yet.
+MIT. See `LICENSE`.

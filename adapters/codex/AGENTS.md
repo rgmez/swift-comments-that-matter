@@ -17,3 +17,7 @@ Canonical source:
 
 - `skills/swift-comments-that-matter/docs/`
 - `skills/swift-comments-that-matter/examples/`
+
+## Quick Prompt
+
+"Apply swift-comments-that-matter: refactor-first, then add only comments that encode intent, risk, constraints, or invariants."

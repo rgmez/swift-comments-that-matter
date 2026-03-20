@@ -9,3 +9,7 @@ Use this adapter when the assistant runtime expects a Cursor-style `SKILL.md`.
 ## Canonical Source
 
 - `standards/swift-comments-that-matter/STANDARD.md`
+
+## Quick Prompt
+
+"Use the swift-comments-that-matter skill to audit these Swift comments and rewrite only the low-signal ones."

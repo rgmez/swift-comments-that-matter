@@ -47,6 +47,40 @@ After:
 /// Why: parallel refreshes can invalidate token chains out of order.
 ```
 
+## Auth Refresh Race (Iconic)
+
+Before:
+
+```swift
+func refreshSessionIfNeeded() async throws {
+    if token.isExpired {
+        token = try await authService.refreshToken()
+    }
+}
+```
+
+After:
+
+```swift
+/// Refreshes the session token if needed.
+///
+/// - Important:
+///   Not concurrency-safe.
+///   Multiple calls may trigger multiple refresh requests.
+///
+/// - Why:
+///   We avoid locking here to keep this layer stateless.
+///   Synchronization is handled at a higher level.
+///
+/// - Risk:
+///   Calling this from multiple async contexts can duplicate refresh requests.
+func refreshSessionIfNeeded() async throws {
+    if token.isExpired {
+        token = try await authService.refreshToken()
+    }
+}
+```
+
 ## Pricing (Rounding)
 
 Before:

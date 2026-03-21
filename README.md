@@ -76,6 +76,36 @@ If you feel the need to explain what the code does, the code probably needs refa
 - SwiftUI async lifecycle stale-write bug:
   - `standards/swift-comments-that-matter/examples/concurrency.swift`
 
+## Iconic Example: Auth Refresh Race
+
+```swift
+// Looks fine, but can fail in production
+func refreshSessionIfNeeded() async throws {
+    if token.isExpired {
+        token = try await authService.refreshToken()
+    }
+}
+
+// Where this standard helps
+/// Refreshes the session token if needed.
+///
+/// - Important:
+///   Not concurrency-safe.
+///   Multiple calls may trigger multiple refresh requests.
+///
+/// - Why:
+///   We avoid locking here to keep this layer stateless.
+///   Synchronization is handled at a higher level.
+///
+/// - Risk:
+///   Calling this from multiple async contexts can duplicate refresh requests.
+func refreshSessionIfNeeded() async throws {
+    if token.isExpired {
+        token = try await authService.refreshToken()
+    }
+}
+```
+
 ## What You Get
 
 - Canonical agent-agnostic standard

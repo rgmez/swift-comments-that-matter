@@ -26,3 +26,7 @@ This folder is the source of truth for:
 - `examples/pricing-rounding.swift`
 
 The `skills/` path remains as a compatibility layer for Cursor packaging.
+
+## License
+
+MIT License. See the repository root `LICENSE`.

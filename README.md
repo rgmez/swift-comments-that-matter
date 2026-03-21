@@ -74,18 +74,12 @@ This standard follows the same boundary Apple docs encourage:
 /// Why: re-rounding intermediate values can produce a 1-cent drift that fails settlement reconciliation.
 ```
 
-## Demo
+## Adoption Assets
 
-When ready, add your visual demo asset:
-- `media/cursor-demo.gif`
-- optional fallback: `media/cursor-demo.png`
-
-Adoption assets:
 - `docs/adoption/README.md`
 - `docs/adoption/before-after.md`
 - `docs/adoption/launch-post.md`
 - `.github/SOCIAL_POST_SHORT.md`
-- `media/README.md`
 
 ## How To Use
 
@@ -157,8 +151,11 @@ Expected:
 ## Releases
 
 - Changelog: `CHANGELOG.md`
-- Release template: `.github/RELEASE_TEMPLATE.md`
+- Release guide: `.github/RELEASE_TEMPLATE.md`
 
 ## License
 
-MIT. See `LICENSE`.
+This project is licensed under the MIT License.
+
+- Full license text: `LICENSE`
+- Copyright: `Copyright (c) 2026 rgmez`

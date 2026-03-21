@@ -18,7 +18,6 @@ The format is based on Keep a Changelog.
   - `docs/adoption/before-after.md`
   - `docs/adoption/launch-post.md`
   - `.github/SOCIAL_POST_SHORT.md`
-  - `media/README.md`
 - Repository formatting guardrails to improve rendering consistency:
   - `.editorconfig`
   - `.gitattributes`
@@ -36,7 +35,7 @@ The format is based on Keep a Changelog.
   - adoption asset references
 - Updated `skills/swift-comments-that-matter/SKILL.md` and `README.md` to include pricing/rounding coverage and stronger DocC positioning
 - Updated `docs/docc-guidance.md` and `docs/golden-examples.md` in both canonical and skills trees for consistency
-- Updated `adapters/cursor/README.md` with direct links to demo/adoption assets
+- Updated `adapters/cursor/README.md` with direct links to adoption assets
 
 ### Compatibility
 - No breaking changes to folder layout or adapter entrypoints

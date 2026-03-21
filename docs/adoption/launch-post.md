@@ -1,4 +1,4 @@
-# Launch Post Template
+# Launch Post Draft
 
 I turned a community poll into a reusable skill: `swift-comments-that-matter`.
 

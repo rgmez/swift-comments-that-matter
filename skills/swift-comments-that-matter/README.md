@@ -66,3 +66,7 @@ skills/swift-comments-that-matter/
 - Rubric scores can be applied consistently.
 - Internal links are valid.
 - Style stays direct, human, and non-generic.
+
+## License
+
+MIT License. See the repository root `LICENSE`.

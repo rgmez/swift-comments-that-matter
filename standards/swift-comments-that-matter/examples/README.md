@@ -1,0 +1,21 @@
+# Examples Index
+
+Quick navigation for production-style comment rewrites (`no`, `bad`, `good`, `best`):
+
+- `concurrency.swift`
+  - token refresh coalescing
+  - SwiftUI lifecycle task cancellation
+- `invariants.swift`
+  - download deduplication invariant
+  - cache eviction assumptions
+- `api-contracts.swift`
+  - public SDK contract guarantees
+  - analytics side-effect boundaries
+- `better-comments.swift`
+  - background scheduling constraints
+  - cache policy assumptions
+- `pricing-rounding.swift`
+  - currency rounding constraints
+  - settlement reconciliation safety
+- `bad-comments.swift`
+  - anti-pattern baselines for rewrite drills

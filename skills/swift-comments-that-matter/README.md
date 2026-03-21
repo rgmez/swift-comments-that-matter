@@ -12,6 +12,18 @@ Canonical standard lives at `standards/swift-comments-that-matter/STANDARD.md`.
 - maintainability over comment volume
 - token-efficient routing for AI agents
 
+## Aligned With Apple Documentation Style
+
+- Use `///` for symbol-level contracts:
+  - invariants
+  - assumptions
+  - constraints
+  - side effects
+- Use DocC articles for system-level context:
+  - architecture
+  - flows across modules
+  - domain concepts
+
 ## Directory Structure
 
 ```text
@@ -34,6 +46,11 @@ skills/swift-comments-that-matter/
 - "Rewrite this API doc comment from bad to best using intent, constraints, and side effects."
 - "Apply refactor-first, then add only comments that describe risk or invariants."
 - "Check DocC boundary: what should stay in `///` vs move to a DocC article?"
+
+## Iconic Example Paths
+
+- `examples/concurrency.swift`
+- `examples/pricing-rounding.swift`
 
 ## Maintenance Policy
 

@@ -33,3 +33,19 @@ Move content to a DocC article if it requires:
 
 If a developer needs the statement while editing one symbol, keep it in `///`.
 If they need broader system context, put it in a DocC article and link it.
+
+## Boundary Examples
+
+Use `///` when the guarantee is local to one symbol:
+
+```swift
+/// Constraint: empty IDs fail fast and never hit transport.
+public func fetchProfile(userID: String) async throws -> Data
+```
+
+Use DocC article content when behavior spans many symbols:
+
+```markdown
+# Payment Pipeline
+Explains quote creation, authorization windows, capture timing, and reconciliation strategy across modules.
+```

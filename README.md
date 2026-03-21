@@ -29,16 +29,63 @@ skills/swift-comments-that-matter/         # Cursor compatibility layer
 - Review checklist with a simple scoring rubric
 - DocC boundary guidance (`///` vs DocC article)
 
+## Aligned With Apple Documentation Style
+
+This standard follows the same boundary Apple docs encourage:
+- Use inline `///` for symbol-level contracts:
+  - invariants
+  - assumptions
+  - constraints
+  - side effects
+- Use DocC articles for system-level concepts:
+  - architecture
+  - multi-step flows
+  - domain language across modules
+
 ## Covered Scenarios
 
 - Token refresh concurrency issues
 - Download manager deduplication invariants
 - Cache eviction assumptions
 - Payment business constraints
+- Pricing and currency rounding constraints
 - SwiftUI async lifecycle edge cases
 - Background task scheduling limits
 - Analytics side effects
 - Public API contracts in frameworks
+
+## Iconic Examples
+
+- Auth refresh concurrency:
+  - `standards/swift-comments-that-matter/examples/concurrency.swift`
+- Pricing rounding and settlement safety:
+  - `standards/swift-comments-that-matter/examples/pricing-rounding.swift`
+- Full examples index:
+  - `standards/swift-comments-that-matter/examples/README.md`
+
+## Before / After
+
+```swift
+/// This function calculates the final payment amount.
+```
+
+```swift
+/// Constraint: totals must be rounded once using provider currency scale before capture.
+/// Why: re-rounding intermediate values can produce a 1-cent drift that fails settlement reconciliation.
+```
+
+## Demo
+
+When ready, add your visual demo asset:
+- `media/cursor-demo.gif`
+- optional fallback: `media/cursor-demo.png`
+
+Adoption assets:
+- `docs/adoption/README.md`
+- `docs/adoption/before-after.md`
+- `docs/adoption/launch-post.md`
+- `.github/SOCIAL_POST_SHORT.md`
+- `media/README.md`
 
 ## How To Use
 

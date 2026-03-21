@@ -103,6 +103,7 @@ The skill must cover:
 - download manager deduplication invariant
 - cache eviction assumptions
 - payment logic business constraints
+- pricing and currency rounding constraints
 - SwiftUI async lifecycle edge cases
 - background task scheduling limitations
 - analytics side effects
@@ -161,6 +162,7 @@ Examples assume modern Swift codebases (Swift 5.9+), Swift Concurrency usage, an
 - [examples/concurrency.swift](examples/concurrency.swift)
 - [examples/invariants.swift](examples/invariants.swift)
 - [examples/api-contracts.swift](examples/api-contracts.swift)
+- [examples/pricing-rounding.swift](examples/pricing-rounding.swift)
 
 ## Additional Resources
 

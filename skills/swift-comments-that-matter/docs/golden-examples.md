@@ -35,6 +35,17 @@ Good:
 Best:
 - "Constraint: capture must occur within provider authorization window. Retrying capture outside that window can settle and immediately refund, creating reconciliation drift."
 
+## Golden 4 - Pricing Rounding Contract
+
+Bad:
+- "Calculates total and rounds it."
+
+Good:
+- "Rounds once at currency scale after combining subtotal, tax, and discount."
+
+Best:
+- "Invariant: persisted order total must equal captured amount exactly to the cent. Re-rounding intermediate components can introduce 1-cent drift and fail reconciliation."
+
 ## Anti-Golden Examples
 
 - "This function does X..." style intros with no risk context.

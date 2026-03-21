@@ -2,6 +2,35 @@
 
 Reusable snippets for social posts, release notes, and replies.
 
+## README Hero Example
+
+Before:
+
+```swift
+/// Fetches the user profile
+func fetchUserProfile() async throws -> User {
+    try await api.getUser()
+}
+```
+
+After:
+
+```swift
+/// Fetches the user profile.
+///
+/// - Important:
+///   Not idempotent - triggers a network request each time.
+///
+/// - Side Effects:
+///   Emits analytics event `profile_requested`.
+///
+/// - Why:
+///   Used to track user engagement when entering the profile screen.
+func fetchUserProfile() async throws -> User {
+    try await api.getUser()
+}
+```
+
 ## Concurrency (Token Refresh)
 
 Before:

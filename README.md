@@ -1,14 +1,121 @@
 # swift-comments-that-matter
 
-A cross-agent standard for writing high-value comments in Swift codebases.
+Most comments do not help.
 
-This project helps developers and AI assistants document what actually matters:
-- why code exists
-- what must not break
-- assumptions, constraints, and side effects
+They repeat what the code already says, or explain things that will change next sprint.
 
-If a sentence explains what the code already does, refactor the code.
-If it explains risk, intent, or contracts, keep the comment.
+This project takes a different approach:
+
+`Write comments only for what the code cannot explain.`
+
+If your comment explains the code, it is already failing.
+Comments are often a symptom of weak naming.
+Refactor first. Comment risk, contracts, and what must not break.
+
+## Quick Rules
+
+- Do not comment what the code already says.
+- Comment what can break.
+- Comment assumptions and constraints.
+- Comment side effects.
+- Comment concurrency risks.
+
+## Why This Exists
+
+This started from a poll about Swift documentation.
+
+People looked split, but the pattern was simple:
+
+- Code explains what happens.
+- Comments explain what must not break.
+
+Poll article:
+
+- [When documentation actually helps (and when it doesn't)](https://www.linkedin.com/pulse/when-documentation-actually-helps-doesnt-roberto-g%C3%B3mez-bvgke/?trackingId=EPUR8ASbhwehJREg2lYQrg%3D%3D)
+
+## Before vs After
+
+```swift
+// Before (bad)
+/// Fetches the user profile
+func fetchUserProfile() async throws -> User {
+    try await api.getUser()
+}
+
+// After (high-signal)
+/// Fetches the user profile.
+///
+/// - Important:
+///   Not idempotent - triggers a network request each time.
+///
+/// - Side Effects:
+///   Emits analytics event `profile_requested`.
+///
+/// - Why:
+///   Used to track user engagement when entering the profile screen.
+func fetchUserProfile() async throws -> User {
+    try await api.getUser()
+}
+```
+
+## When NOT To Write Comments
+
+- The code is already clear after normal refactoring.
+- The comment repeats the function or type name.
+- The logic is trivial and has no hidden risk.
+- The comment is likely to rot faster than the code.
+
+If you feel the need to explain what the code does, the code probably needs refactoring.
+
+## Painful Real Examples
+
+- Auth refresh race condition:
+  - `standards/swift-comments-that-matter/examples/concurrency.swift`
+- Cache invalidation constraints:
+  - `standards/swift-comments-that-matter/examples/invariants.swift`
+- SwiftUI async lifecycle stale-write bug:
+  - `standards/swift-comments-that-matter/examples/concurrency.swift`
+
+## What You Get
+
+- Canonical agent-agnostic standard
+- Adapter entrypoints for Cursor, Claude, and Codex
+- Production-style Swift examples (`no`, `bad`, `good`, `best`)
+- Decision rules with refactor-first guidance
+- Review checklist and scoring rubric
+- DocC boundary guidance (`///` vs DocC article)
+
+## Aligned With Apple Documentation Style
+
+Use inline `///` for symbol-level contracts:
+
+- invariants
+- assumptions
+- constraints
+- side effects
+
+Use DocC articles for system-level context:
+
+- architecture
+- multi-step flows
+- domain behavior across modules
+
+## PR Review Checklist
+
+Use this quick pass in code review:
+
+- Does this comment explain intent instead of mechanics?
+- Does it capture a real risk, constraint, or invariant?
+- Would this still be correct after a refactor next month?
+- If removed, would we lose safety-critical context?
+
+Full checklist and rubric:
+
+- `standards/swift-comments-that-matter/docs/checklist.md`
+
+## Copy-Paste Ready Examples
+
+- `docs/adoption/before-after.md`
 
 ## Repository Contents
 
@@ -18,60 +125,6 @@ adapters/cursor/                           # Cursor adapter
 adapters/claude/                           # Claude adapter
 adapters/codex/                            # Codex adapter
 skills/swift-comments-that-matter/         # Cursor compatibility layer
-```
-
-## What You Get
-
-- A canonical agent-agnostic standard
-- Adapter entrypoints for Cursor, Claude, and Codex
-- Realistic Swift examples (no-comment, bad, good, best)
-- Decision rules and refactor-first guidance
-- Review checklist with a simple scoring rubric
-- DocC boundary guidance (`///` vs DocC article)
-
-## Aligned With Apple Documentation Style
-
-This standard follows the same boundary Apple docs encourage:
-- Use inline `///` for symbol-level contracts:
-  - invariants
-  - assumptions
-  - constraints
-  - side effects
-- Use DocC articles for system-level concepts:
-  - architecture
-  - multi-step flows
-  - domain language across modules
-
-## Covered Scenarios
-
-- Token refresh concurrency issues
-- Download manager deduplication invariants
-- Cache eviction assumptions
-- Payment business constraints
-- Pricing and currency rounding constraints
-- SwiftUI async lifecycle edge cases
-- Background task scheduling limits
-- Analytics side effects
-- Public API contracts in frameworks
-
-## Iconic Examples
-
-- Auth refresh concurrency:
-  - `standards/swift-comments-that-matter/examples/concurrency.swift`
-- Pricing rounding and settlement safety:
-  - `standards/swift-comments-that-matter/examples/pricing-rounding.swift`
-- Full examples index:
-  - `standards/swift-comments-that-matter/examples/README.md`
-
-## Before / After
-
-```swift
-/// This function calculates the final payment amount.
-```
-
-```swift
-/// Constraint: totals must be rounded once using provider currency scale before capture.
-/// Why: re-rounding intermediate values can produce a 1-cent drift that fails settlement reconciliation.
 ```
 
 ## Adoption Assets
@@ -123,11 +176,13 @@ Suggested prompt:
 ### Option C: Claude / Codex (adapter-guided)
 
 Use adapter docs for tool-specific framing:
+
 - `adapters/claude/CLAUDE.md`
 - `adapters/codex/AGENTS.md`
 - `adapters/cursor/README.md`
 
 Then follow the canonical standard:
+
 - `standards/swift-comments-that-matter/STANDARD.md`
 
 ## Verification after install
@@ -137,6 +192,7 @@ Run one smoke prompt and confirm response shape:
 > "Review these Swift comments with swift-comments-that-matter. Return no/bad/good/best rewrites and explain what must not break."
 
 Expected:
+
 - uses refactor-first reasoning before adding comments
 - avoids generic intros like "This function..."
 - includes constraints, risks, side effects, or invariants where relevant
@@ -152,6 +208,7 @@ Expected:
 
 - Changelog: `CHANGELOG.md`
 - Release guide: `.github/RELEASE_TEMPLATE.md`
+- Latest draft notes: `.github/RELEASE_NOTES_1.1.0.md`
 
 ## License
 

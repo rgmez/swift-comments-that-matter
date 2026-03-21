@@ -157,5 +157,5 @@ Expected:
 
 This project is licensed under the MIT License.
 
-- Full license text: `LICENSE`
-- Copyright: `Copyright (c) 2026 rgmez`
+- Full license text: [LICENSE](LICENSE)
+- Copyright: `Copyright (c) 2026 Roberto Gómez`

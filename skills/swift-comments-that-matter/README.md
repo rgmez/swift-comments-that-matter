@@ -10,7 +10,7 @@ Canonical standard lives at `standards/swift-comments-that-matter/STANDARD.md`.
 - intent over implementation narration
 - constraints over generic explanation
 - maintainability over comment volume
-- token-efficient routing for AI agents
+- tooling-friendly routing and references
 
 ## Aligned With Apple Documentation Style
 
@@ -51,6 +51,7 @@ skills/swift-comments-that-matter/
 
 - `examples/concurrency.swift`
 - `examples/pricing-rounding.swift`
+- `docs/review-red-flags.md`
 
 ## Maintenance Policy
 

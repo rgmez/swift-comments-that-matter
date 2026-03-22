@@ -2,7 +2,7 @@
 
 ## Scope
 
-Canonical, assistant-agnostic guidance for writing high-value comments in Swift codebases (iOS, macOS, watchOS, tvOS, visionOS).
+Canonical, tool-agnostic guidance for writing high-value comments in Swift codebases (iOS, macOS, watchOS, tvOS, visionOS).
 
 ## Goal
 
@@ -165,6 +165,7 @@ Describes refresh token coalescing, retry budget policy, and account-scoped isol
 - `standards/swift-comments-that-matter/docs/example-constraints.md`
 - `standards/swift-comments-that-matter/docs/golden-examples.md`
 - `standards/swift-comments-that-matter/docs/docc-guidance.md`
+- `standards/swift-comments-that-matter/docs/review-red-flags.md`
 
 ## Examples
 

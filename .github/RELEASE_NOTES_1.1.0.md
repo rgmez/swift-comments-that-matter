@@ -28,7 +28,6 @@
 - Added adoption assets:
   - `docs/adoption/before-after.md`
   - `docs/adoption/launch-post.md`
-  - `.github/SOCIAL_POST_SHORT.md`
 - Updated root README and Cursor adapter docs to surface these paths directly
 
 ## Why this release
@@ -48,7 +47,6 @@ Version `1.1.0` focuses on moving from a solid foundation to a publish-ready, re
 - `docs/adoption/README.md`
 - `docs/adoption/before-after.md`
 - `docs/adoption/launch-post.md`
-- `.github/SOCIAL_POST_SHORT.md`
 - `.editorconfig`
 - `.gitattributes`
 

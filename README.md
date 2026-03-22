@@ -20,6 +20,19 @@ Refactor first. Comment risk, contracts, and what must not break.
 - Comment side effects.
 - Comment concurrency risks.
 
+## Quick Start (30s)
+
+1. Open `standards/swift-comments-that-matter/STANDARD.md`.
+2. Run your rewrite with the `no -> bad -> good -> best` pattern.
+3. Apply the PR checklist in this README before merging.
+
+## Non-Goals
+
+- Teaching Swift basics.
+- Replacing good naming with comments.
+- Writing long documentation for trivial code paths.
+- Forcing comments where the code is already explicit.
+
 ## Why This Exists
 
 This started from a poll about Swift documentation.
@@ -108,7 +121,7 @@ func refreshSessionIfNeeded() async throws {
 
 ## What You Get
 
-- Canonical agent-agnostic standard
+- Canonical tool-agnostic standard
 - Adapter entrypoints for Cursor, Claude, and Codex
 - Production-style Swift examples (`no`, `bad`, `good`, `best`)
 - Decision rules with refactor-first guidance
@@ -146,6 +159,7 @@ Full checklist and rubric:
 ## Copy-Paste Ready Examples
 
 - `docs/adoption/before-after.md`
+- `standards/swift-comments-that-matter/docs/review-red-flags.md`
 
 ## Repository Contents
 
@@ -162,12 +176,11 @@ skills/swift-comments-that-matter/         # Cursor compatibility layer
 - `docs/adoption/README.md`
 - `docs/adoption/before-after.md`
 - `docs/adoption/launch-post.md`
-- `.github/SOCIAL_POST_SHORT.md`
 
 ## How To Use
 
 1. Start with `standards/swift-comments-that-matter/STANDARD.md`.
-2. Pick your adapter in `adapters/` based on your assistant.
+2. Pick your adapter in `adapters/` based on your tooling.
 3. Use `skills/swift-comments-that-matter/` only for Cursor compatibility.
 
 ## Install by environment
@@ -199,7 +212,7 @@ npx skills update
 2. Use `skills/swift-comments-that-matter/` as the Cursor-compatible package.
 3. Ask Cursor to apply `swift-comments-that-matter` when reviewing or rewriting comments.
 
-Suggested prompt:
+Suggested request text:
 
 > "Use swift-comments-that-matter to audit these Swift comments and rewrite only low-signal ones."
 
@@ -217,7 +230,7 @@ Then follow the canonical standard:
 
 ## Verification after install
 
-Run one smoke prompt and confirm response shape:
+Run one smoke check and confirm response shape:
 
 > "Review these Swift comments with swift-comments-that-matter. Return no/bad/good/best rewrites and explain what must not break."
 

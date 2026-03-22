@@ -19,6 +19,7 @@ This folder is the source of truth for:
 
 - `docs/`
 - `examples/`
+- `docs/review-red-flags.md`
 
 ## Iconic Example Paths
 

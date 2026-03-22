@@ -1,6 +1,6 @@
 # Cursor Adapter
 
-Use this adapter when the assistant runtime expects a Cursor-style `SKILL.md`.
+Use this adapter when the runtime expects a Cursor-style `SKILL.md`.
 
 ## Entry
 
@@ -18,7 +18,6 @@ Use this adapter when the assistant runtime expects a Cursor-style `SKILL.md`.
 
 - Before/after snippets: `docs/adoption/before-after.md`
 - Launch copy draft: `docs/adoption/launch-post.md`
-- Short social variant: `.github/SOCIAL_POST_SHORT.md`
 
 ## License
 

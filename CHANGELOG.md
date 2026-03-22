@@ -17,7 +17,6 @@ The format is based on Keep a Changelog.
   - `docs/adoption/README.md`
   - `docs/adoption/before-after.md`
   - `docs/adoption/launch-post.md`
-  - `.github/SOCIAL_POST_SHORT.md`
 - Repository formatting guardrails to improve rendering consistency:
   - `.editorconfig`
   - `.gitattributes`

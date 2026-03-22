@@ -2,7 +2,7 @@
 
 I turned a community poll into a reusable skill: `swift-comments-that-matter`.
 
-It helps reviewers and AI assistants write comments that focus on:
+It helps teams write comments that focus on:
 - why code exists
 - what must not break
 - assumptions, constraints, and side effects

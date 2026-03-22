@@ -19,7 +19,7 @@ This skill focuses on:
 
 - Human
 - Direct
-- No AI-sounding phrases
+- No robotic-sounding phrases
 - No tutorial tone
 - No over-explaining basics
 

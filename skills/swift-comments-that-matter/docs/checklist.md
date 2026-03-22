@@ -1,6 +1,6 @@
 # Checklist
 
-Use this checklist for pull requests and AI-generated comment rewrites.
+Use this checklist for pull requests and automated comment rewrites.
 
 ## Pass/Fail Checks
 

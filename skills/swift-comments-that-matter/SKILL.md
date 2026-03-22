@@ -28,7 +28,7 @@ Apply this skill when:
 
 1. Apply the decision flow in this file.
 2. Use the rewrite pattern: no comment -> bad -> good -> best.
-3. Follow AI guardrails and voice calibration.
+3. Follow writing guardrails and voice calibration.
 
 ## Read When Needed
 
@@ -38,11 +38,13 @@ Apply this skill when:
 - Example constraints: [docs/example-constraints.md](docs/example-constraints.md)
 - DocC boundaries: [docs/docc-guidance.md](docs/docc-guidance.md)
 - Golden references: [docs/golden-examples.md](docs/golden-examples.md)
+- Review red flags: [docs/review-red-flags.md](docs/review-red-flags.md)
 
 ## Quick Routing
 
 - Quick review path: `docs/checklist.md`
 - Rewrite path: `docs/decision-rules.md` + `docs/golden-examples.md`
+- Review anti-pattern path: `docs/review-red-flags.md`
 - DocC boundary path: `docs/docc-guidance.md`
 
 ## Core Principle
@@ -119,7 +121,7 @@ Avoid:
 - tutorial-style toy examples
 - long comments with no constraints or risk
 
-## AI Guardrails
+## Writing Guardrails
 
 When generating comments:
 - NEVER start with:
@@ -173,3 +175,4 @@ Examples assume modern Swift codebases (Swift 5.9+), Swift Concurrency usage, an
 - [docs/example-constraints.md](docs/example-constraints.md)
 - [docs/golden-examples.md](docs/golden-examples.md)
 - [docs/docc-guidance.md](docs/docc-guidance.md)
+- [docs/review-red-flags.md](docs/review-red-flags.md)

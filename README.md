@@ -251,7 +251,7 @@ Expected:
 
 - Changelog: `CHANGELOG.md`
 - Release guide: `.github/RELEASE_TEMPLATE.md`
-- Latest draft notes: `.github/RELEASE_NOTES_1.1.0.md`
+- Latest draft notes: `.github/RELEASE_NOTES_1.1.1.md`
 
 ## License
 

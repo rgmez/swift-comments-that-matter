@@ -6,6 +6,35 @@ The format is based on Keep a Changelog.
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-03-22
+
+### Added
+- New review anti-pattern references:
+  - `standards/swift-comments-that-matter/docs/review-red-flags.md`
+  - `skills/swift-comments-that-matter/docs/review-red-flags.md`
+- Docs CI workflow:
+  - `.github/workflows/docs-checks.yml`
+  - local markdown link checker under `scripts/check_markdown_local_links.py`
+
+### Changed
+- Reworked root `README.md` with stronger positioning and usability:
+  - sharper opening and direct "what to do" guidance
+  - `Quick Start (30s)` and `Non-Goals`
+  - iconic auth refresh race example and poll article reference
+  - expanded copy-paste section and PR review guidance
+- Expanded editorial contribution rules in `CONTRIBUTING.md`:
+  - style rules
+  - reject criteria for weak examples
+  - docs CI check in PR checklist
+- Removed social-post artifact and related references:
+  - `.github/SOCIAL_POST_SHORT.md`
+- Normalized wording across docs to avoid AI-first framing and keep tone authorial/tool-agnostic
+- Tuned markdownlint configuration to match repository doc style while keeping docs checks active
+
+### Compatibility
+- No breaking changes
+- Existing install paths, adapters, and examples remain valid
+
 ## [1.1.0] - 2026-03-21
 
 ### Added

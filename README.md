@@ -168,7 +168,7 @@ standards/swift-comments-that-matter/      # canonical standard
 adapters/cursor/                           # Cursor adapter
 adapters/claude/                           # Claude adapter
 adapters/codex/                            # Codex adapter
-skills/swift-comments-that-matter/         # Cursor compatibility layer
+skills/swift-comments-that-matter/         # portable skill package
 ```
 
 ## Adoption Assets
@@ -181,7 +181,7 @@ skills/swift-comments-that-matter/         # Cursor compatibility layer
 
 1. Start with `standards/swift-comments-that-matter/STANDARD.md`.
 2. Pick your adapter in `adapters/` based on your tooling.
-3. Use `skills/swift-comments-that-matter/` only for Cursor compatibility.
+3. Use `skills/swift-comments-that-matter/` when your runtime loads a `SKILL.md` package directly.
 
 ## Install by environment
 
@@ -251,7 +251,7 @@ Expected:
 
 - Changelog: `CHANGELOG.md`
 - Release guide: `.github/RELEASE_TEMPLATE.md`
-- Latest draft notes: `.github/RELEASE_NOTES_1.1.1.md`
+- Latest draft notes: `.github/RELEASE_NOTES_1.1.2.md`
 
 ## License
 

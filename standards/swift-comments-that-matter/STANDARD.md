@@ -65,6 +65,8 @@ Use section labels only when they improve scanability. Keep each line specific.
   - `Constraint: totals are rounded once at provider scale before capture.`
 - `Assumption:`
   - `Assumption: cache policy validation happened upstream.`
+- `Risk:`
+  - `Risk: parallel refreshes can invalidate token chain order.`
 - `Side Effects:`
   - `Side Effects: emits finance analytics events consumed by reconciliation jobs.`
 - `Concurrency:`

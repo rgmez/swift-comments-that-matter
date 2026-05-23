@@ -25,3 +25,8 @@ jobs:
 
       - name: Validate local markdown links
         run: python3 scripts/check_markdown_local_links.py
+
+      - name: Validate mirrored skill content
+        run: |
+          diff -rq standards/swift-comments-that-matter/docs skills/swift-comments-that-matter/docs
+          diff -rq standards/swift-comments-that-matter/examples skills/swift-comments-that-matter/examples

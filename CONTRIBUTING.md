@@ -6,7 +6,7 @@ Thanks for contributing to `swift-comments-that-matter`.
 
 - A canonical, tool-agnostic standard in `standards/swift-comments-that-matter/`
 - Adapter entrypoints in `adapters/`
-- Cursor compatibility layer in `skills/swift-comments-that-matter/`
+- Portable skill package in `skills/swift-comments-that-matter/`
 
 ## Contribution Rules
 
@@ -46,6 +46,7 @@ Examples must include realistic risk or constraints and avoid trivial logic.
 
 - [ ] Changes align with `standards/swift-comments-that-matter/STANDARD.md`
 - [ ] References and links are valid
+- [ ] Mirrored `standards/` and `skills/` docs/examples stay synchronized
 - [ ] Docs Checks CI passes (`.github/workflows/docs-checks.yml`)
 - [ ] New examples follow required scenario pattern
 - [ ] No low-signal boilerplate comments introduced

@@ -6,6 +6,14 @@ The format is based on Keep a Changelog.
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-05-23
+
+### Changed
+- Clarified that checklist scoring applies only to relevant criteria, so comments are not penalized for missing side-effect or concurrency notes when those risks do not exist.
+- Added `Risk:` as an explicit supported comment section in the canonical standard and skill entrypoint.
+- Clarified that `skills/swift-comments-that-matter/` is a portable `SKILL.md` package, not only a Cursor compatibility layer.
+- Added a CI check to catch drift between mirrored `standards/` and `skills/` docs/examples.
+
 ## [1.1.1] - 2026-03-22
 
 ### Added

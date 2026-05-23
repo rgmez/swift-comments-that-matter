@@ -5,7 +5,7 @@ description: Write high-value Swift comments that explain intent, invariants, co
 
 # Swift Comments That Matter
 
-Compatibility note: this `SKILL.md` is the Cursor adapter entrypoint.
+Compatibility note: this `SKILL.md` is the portable skill entrypoint for runtimes that load skill packages directly, including Cursor-compatible installs.
 Canonical standard lives at `standards/swift-comments-that-matter/STANDARD.md`.
 
 ## Purpose
@@ -79,6 +79,7 @@ Use only when needed:
 - `Assumption:`
 - `Constraint:`
 - `Invariant:`
+- `Risk:`
 - `Side Effects:`
 - `Concurrency:`
 

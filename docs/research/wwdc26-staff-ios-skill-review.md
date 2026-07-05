@@ -346,4 +346,3 @@ El cambio de mayor impacto es esta jerarquía:
 > Primero haz el contrato explícito en el código. Después hazlo ejecutable en un
 > test. Comenta únicamente la decisión, el límite o el riesgo que todavía queda
 > invisible. Usa DocC cuando ese contexto deje de pertenecer a un solo símbolo.
-

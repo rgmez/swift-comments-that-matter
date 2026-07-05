@@ -50,6 +50,7 @@ skills/swift-comments-that-matter/
 ## Iconic Example Paths
 
 - `examples/concurrency.swift`
+- `examples/modern-contracts.swift`
 - `examples/pricing-rounding.swift`
 - `docs/review-red-flags.md`
 

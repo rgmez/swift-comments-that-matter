@@ -46,7 +46,52 @@ Good:
 Best:
 - "Invariant: persisted order total must equal captured amount exactly to the cent. Re-rounding intermediate components can introduce 1-cent drift and fail reconciliation."
 
+## Golden 5 - Cancellation Point Of No Return
+
+Bad:
+- "Uses a cancellation shield."
+
+Good:
+- "Cancellation: once replacement starts, cleanup must complete before returning."
+
+Best:
+- "Cancellation: after the temporary file is swapped into place, cancellation is shielded until commit or rollback finishes. Exiting between those steps can leave neither version recoverable."
+
+## Golden 6 - SwiftUI Lazy Lifetime
+
+Bad:
+- "Stores row state."
+
+Good:
+- "Lifetime: row-local state is safe only for visual affordances that may reset after scrolling away."
+
+Best:
+- "Lifetime: `LazyVStack` may discard off-screen row state while the item remains in the domain model. Persist selection and in-flight work by stable item ID, not in the row view."
+
+## Golden 7 - Generated Source Of Truth
+
+Bad:
+- "Generated client for orders."
+
+Good:
+- "Generated: contract lives in `orders.proto`; regenerate the client after schema changes."
+
+Best:
+- "Generated: field numbers in `orders.proto` are the compatibility contract and must not be reused. Do not patch this generated client manually; regenerate it from the schema."
+
+## Golden 8 - Performance Evidence
+
+Bad:
+- "Optimized for performance."
+
+Good:
+- "Performance: keep decoding off the main actor for large search fixtures."
+
+Best:
+- "Performance: keep 10k-item decoding off the main actor; `SearchResults.trace` shows it otherwise exceeds the 100 ms interaction budget."
+
 ## Anti-Golden Examples
 
 - "This function does X..." style intros with no risk context.
 - Long comments that describe each line of straightforward control flow.
+- TODO/workaround/performance comments with no owner, evidence, or removal condition.

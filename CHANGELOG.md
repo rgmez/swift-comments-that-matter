@@ -6,6 +6,24 @@ The format is based on Keep a Changelog.
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-07-05
+
+### Added
+- Added modern Swift contract guidance for cancellation, isolation, ownership, lifetime, backpressure, generated code, compatibility, and performance evidence.
+- Added `modern-contracts.swift` examples covering cancellation point-of-no-return, SwiftUI lazy lifetime, `.task(id:)` stale completion, Observation dependency reads, generated schemas, stream backpressure, and measured performance constraints.
+- Added audit classifications for existing comments: `keep`, `refactor`, `encode`, `test`, `move-to-DocC`, and `delete`.
+- Added WWDC26 staff review research notes under `docs/research/`.
+
+### Changed
+- Updated the decision flow to prefer compiler-visible contracts and executable tests before comments.
+- Expanded DocC guidance with generated-code, version-dependent behavior, and local performance/compatibility boundaries.
+- Strengthened review red flags for TODOs, temporary workarounds, performance claims without evidence, and comments that contradict types or tests.
+- Updated root README, portable skill package, and canonical standard to reflect the Swift 6.3+/Xcode 27-oriented taxonomy while preserving the original refactor-first principle.
+
+### Compatibility
+- No breaking changes to folder layout, adapter entrypoints, or install paths.
+- Existing Swift 5.9+ guidance remains valid; the new rules add stronger defaults for modern Swift and SwiftUI projects.
+
 ## [1.1.2] - 2026-05-23
 
 ### Changed

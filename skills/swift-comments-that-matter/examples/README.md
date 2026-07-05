@@ -17,5 +17,11 @@ Quick navigation for production-style comment rewrites (`no`, `bad`, `good`, `be
 - `pricing-rounding.swift`
   - currency rounding constraints
   - settlement reconciliation safety
+- `modern-contracts.swift`
+  - cancellation point-of-no-return
+  - SwiftUI lazy lifetime and `.task(id:)` reentry
+  - Observation implicit dependency reads
+  - generated schema source-of-truth
+  - stream backpressure and performance evidence
 - `bad-comments.swift`
   - anti-pattern baselines for rewrite drills

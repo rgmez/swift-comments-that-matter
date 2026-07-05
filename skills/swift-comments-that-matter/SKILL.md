@@ -1,6 +1,6 @@
 ---
 name: swift-comments-that-matter
-description: Write high-value Swift comments that explain intent, invariants, constraints, side effects, and concurrency risks. Use when reviewing or authoring comments in iOS/macOS/watchOS/tvOS/visionOS codebases, especially to replace low-signal "what it does" comments with concise "why and what must not break" documentation.
+description: Write high-value Swift comments that explain intent, invariants, constraints, side effects, Swift Concurrency risks, SwiftUI lifecycle behavior, generated-code boundaries, and contracts not fully expressed by types or tests. Use when reviewing or authoring comments in iOS/macOS/watchOS/tvOS/visionOS codebases, especially to replace low-signal "what it does" comments with concise "why, what must not break, and when this guidance can be removed" documentation.
 ---
 
 # Swift Comments That Matter
@@ -52,6 +52,14 @@ Apply this skill when:
 If the text explains what the code does -> improve the code.
 If the text explains why it exists or what must not break -> write the comment.
 
+## Contract Hierarchy
+
+Prefer stronger sources of truth before prose:
+1. encode the contract in types, isolation, ownership, availability, diagnostics, or API shape;
+2. verify the contract with tests or preconditions when it is executable;
+3. comment only the decision, boundary, trade-off, or failure mode still invisible;
+4. move broader system context to DocC when it no longer belongs to one symbol.
+
 ## Refactor-First Rule
 
 Before writing a comment, first consider:
@@ -65,9 +73,12 @@ If readability can be improved, refactor first.
 
 Before writing a comment, ask:
 1. Can naming or structure remove the need for the comment?
-2. Is there hidden behavior not obvious from code?
-3. Are there constraints, assumptions, invariants, or risks?
-4. Could another developer misuse this API or flow?
+2. Can types, actor isolation, ownership, availability, diagnostics, tests, or preconditions express the contract?
+3. Is there hidden framework behavior not obvious from code?
+4. Does correctness depend on identity, ordering, lifetime, cancellation, isolation, ownership, or backpressure?
+5. Is there a generated artifact or external source of truth?
+6. Does the comment include a verifiable condition for remaining true or being removed?
+7. Could another developer misuse this API or flow without compiler/test feedback?
 
 If all answers are "no", do not comment.
 
@@ -82,6 +93,16 @@ Use only when needed:
 - `Risk:`
 - `Side Effects:`
 - `Concurrency:`
+- `Cancellation:`
+- `Isolation:`
+- `Ownership:`
+- `Lifetime:`
+- `Backpressure:`
+- `Performance:`
+- `Compatibility:`
+- `Generated:`
+
+Prefer the most precise section. Use `Concurrency:` only for broad concurrency context; use `Cancellation:`, `Isolation:`, `Ownership:`, or `Backpressure:` when one of those is the actual risk.
 
 ## When Not To Comment
 
@@ -108,6 +129,14 @@ The skill must cover:
 - payment logic business constraints
 - pricing and currency rounding constraints
 - SwiftUI async lifecycle edge cases
+- SwiftUI identity, lazy-container state lifetime, and repeatable `onAppear`
+- Observation dependencies that are registered implicitly by framework reads
+- cancellation boundaries, cleanup, rollback, and point-of-no-return behavior
+- actor isolation, task ownership, and non-copyable ownership/lifetime constraints
+- stream ordering, cancellation, and backpressure
+- generated-code source-of-truth and regeneration boundaries
+- performance constraints backed by reproducible evidence
+- compatibility workarounds with explicit removal conditions
 - background task scheduling limitations
 - analytics side effects
 - public API contracts in frameworks
@@ -121,6 +150,10 @@ Avoid:
 - line-by-line narration
 - tutorial-style toy examples
 - long comments with no constraints or risk
+- TODOs without owner, condition, or exit criteria
+- "temporary" or workaround comments without version, issue, or removal event
+- performance claims without metric, fixture, trace, or benchmark
+- comments that contradict types, compiler diagnostics, or tests
 
 ## Writing Guardrails
 
@@ -147,16 +180,23 @@ Use inline `///` comments for:
 - invariants
 - assumptions
 - side effects
+- local compatibility or performance constraints
 
 Use DocC articles for:
 - architecture explanations
 - system flows
 - domain concepts
 - cross-module behavior
+- version-dependent behavior spanning multiple symbols
+
+Generated code boundary:
+- do not add manual documentation to generated artifacts;
+- document the schema, specification, or stable wrapper that owns the contract;
+- include the regeneration command or process when it is not discoverable.
 
 ## Compatibility Note
 
-Examples assume modern Swift codebases (Swift 5.9+), Swift Concurrency usage, and current SwiftUI lifecycle patterns.
+Examples target modern Swift codebases using Swift 6.3+/Xcode 27 concepts, Swift Concurrency, SwiftUI lifecycle behavior, Observation, and generated-code workflows. The principle is retrocompatible with older Swift projects: encode or test what you can, then comment only what remains invisible.
 
 ## Examples
 
@@ -166,6 +206,7 @@ Examples assume modern Swift codebases (Swift 5.9+), Swift Concurrency usage, an
 - [examples/invariants.swift](examples/invariants.swift)
 - [examples/api-contracts.swift](examples/api-contracts.swift)
 - [examples/pricing-rounding.swift](examples/pricing-rounding.swift)
+- [examples/modern-contracts.swift](examples/modern-contracts.swift)
 
 ## Additional Resources
 

@@ -19,6 +19,8 @@ Refactor first. Comment risk, contracts, and what must not break.
 - Comment assumptions and constraints.
 - Comment side effects.
 - Comment concurrency risks.
+- Prefer compiler-visible contracts and tests before prose.
+- Give workarounds, performance notes, and generated-code comments a verifiable source of truth.
 
 ## Quick Start (30s)
 
@@ -88,6 +90,8 @@ If you feel the need to explain what the code does, the code probably needs refa
   - `standards/swift-comments-that-matter/examples/invariants.swift`
 - SwiftUI async lifecycle stale-write bug:
   - `standards/swift-comments-that-matter/examples/concurrency.swift`
+- Cancellation, SwiftUI lazy lifetime, Observation, generated schemas, and backpressure:
+  - `standards/swift-comments-that-matter/examples/modern-contracts.swift`
 
 ## Iconic Example: Auth Refresh Race
 
@@ -124,6 +128,7 @@ func refreshSessionIfNeeded() async throws {
 - Canonical tool-agnostic standard
 - Adapter entrypoints for Cursor, Claude, and Codex
 - Production-style Swift examples (`no`, `bad`, `good`, `best`)
+- Modern Swift examples for cancellation, ownership/lifetime, Observation, generated code, and performance evidence
 - Decision rules with refactor-first guidance
 - Review checklist and scoring rubric
 - DocC boundary guidance (`///` vs DocC article)
@@ -149,6 +154,8 @@ Use this quick pass in code review:
 
 - Does this comment explain intent instead of mechanics?
 - Does it capture a real risk, constraint, or invariant?
+- Could the compiler, type system, actor isolation, ownership, diagnostics, tests, or preconditions enforce this better?
+- Does it include evidence or a removal condition when it is operational?
 - Would this still be correct after a refactor next month?
 - If removed, would we lose safety-critical context?
 
@@ -251,7 +258,7 @@ Expected:
 
 - Changelog: `CHANGELOG.md`
 - Release guide: `.github/RELEASE_TEMPLATE.md`
-- Latest draft notes: `.github/RELEASE_NOTES_1.1.2.md`
+- Latest draft notes: `.github/RELEASE_NOTES_1.2.0.md`
 
 ## License
 

@@ -18,10 +18,13 @@ Quick navigation for production-style comment rewrites (`no`, `bad`, `good`, `be
   - currency rounding constraints
   - settlement reconciliation safety
 - `modern-contracts.swift`
+  - compiler-enforced isolation over prose comments
+  - ownership and borrowed lifetime boundaries
   - cancellation point-of-no-return
   - SwiftUI lazy lifetime and `.task(id:)` reentry
   - Observation implicit dependency reads
   - generated schema source-of-truth
   - stream backpressure and performance evidence
+  - compatibility fallbacks and diagnostic exceptions
 - `bad-comments.swift`
   - anti-pattern baselines for rewrite drills

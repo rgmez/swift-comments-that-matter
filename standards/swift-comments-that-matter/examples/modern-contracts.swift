@@ -1,5 +1,72 @@
 import Foundation
 
+// MARK: - Compiler Contract Over Prose
+
+@MainActor
+final class MainActorStore {
+    private var values: [String] = []
+
+    // 1) NO COMMENT (clean but incomplete)
+    func appendNoComment(_ value: String) {
+        values.append(value)
+    }
+
+    // 2) BAD COMMENT (anti-pattern)
+    /// This method is not thread-safe.
+    func appendBadComment(_ value: String) {
+        appendNoComment(value)
+    }
+
+    // 3) GOOD COMMENT (useful)
+    /// Isolation: mutations must stay on the main actor because SwiftUI reads `values` during view updates.
+    func appendGoodComment(_ value: String) {
+        appendNoComment(value)
+    }
+
+    // 4) BEST COMMENT (intent + constraint + reasoning)
+    /// Isolation: keep writes on the main actor; SwiftUI observes `values` during body evaluation and expects UI state to change on that executor.
+    /// Why: a prose "not thread-safe" warning is weaker than the `@MainActor` boundary and should not be the source of truth for this contract.
+    func appendBestComment(_ value: String) {
+        appendNoComment(value)
+    }
+}
+
+// MARK: - Ownership And Borrowed Lifetime
+
+struct UploadLease {
+    let id: UUID
+}
+
+struct UploadCoordinator {
+    // 1) NO COMMENT
+    func startNoComment(with lease: UploadLease) async {
+        await openConnection(for: lease)
+    }
+
+    // 2) BAD COMMENT
+    /// This function uses the lease.
+    func startBadComment(with lease: UploadLease) async {
+        await startNoComment(with: lease)
+    }
+
+    // 3) GOOD COMMENT
+    /// Ownership: the coordinator owns the upload lease until the connection is closed.
+    func startGoodComment(with lease: UploadLease) async {
+        await startNoComment(with: lease)
+    }
+
+    // 4) BEST COMMENT
+    /// Ownership: treat the lease as consumed by the upload session; do not share it with retry paths after `openConnection` starts.
+    /// Lifetime: the lease remains valid only until the server closes the stream or the task is cancelled.
+    func startBestComment(with lease: UploadLease) async {
+        await startNoComment(with: lease)
+    }
+
+    private func openConnection(for lease: UploadLease) async {
+        _ = lease
+    }
+}
+
 // MARK: - Cancellation Point Of No Return
 
 struct AtomicFileReplacer {
@@ -225,5 +292,69 @@ struct SearchDecoder {
     /// Constraint: update the trace or remove this comment if the fixture size or interaction budget changes.
     func decodeBestComment(_ data: Data) throws -> [String] {
         try decodeNoComment(data)
+    }
+}
+
+// MARK: - Compatibility And Diagnostic Exceptions
+
+struct LegacyLayoutAdapter {
+    let usesLegacyObservationFallback: Bool
+
+    // 1) NO COMMENT
+    func invalidateNoComment() {
+        if usesLegacyObservationFallback {
+            invalidateManually()
+        }
+    }
+
+    // 2) BAD COMMENT
+    /// Temporary workaround for old systems.
+    func invalidateBadComment() {
+        invalidateNoComment()
+    }
+
+    // 3) GOOD COMMENT
+    /// Compatibility: keep manual invalidation while legacy Observation fallback is enabled.
+    func invalidateGoodComment() {
+        invalidateNoComment()
+    }
+
+    // 4) BEST COMMENT
+    /// Compatibility: manual invalidation exists only for the legacy Observation fallback.
+    /// Constraint: remove this path with the fallback flag; until then, deleting it leaves UIKit/AppKit adapters with stale tracked reads.
+    func invalidateBestComment() {
+        invalidateNoComment()
+    }
+
+    private func invalidateManually() {}
+}
+
+struct DiagnosticException {
+    // 1) NO COMMENT
+    func bridgeNoComment(_ selectorName: String) {
+        performSelector(named: selectorName)
+    }
+
+    // 2) BAD COMMENT
+    /// Ignore the diagnostic here.
+    func bridgeBadComment(_ selectorName: String) {
+        bridgeNoComment(selectorName)
+    }
+
+    // 3) GOOD COMMENT
+    /// Compatibility: dynamic selectors are required for the legacy plugin bridge.
+    func bridgeGoodComment(_ selectorName: String) {
+        bridgeNoComment(selectorName)
+    }
+
+    // 4) BEST COMMENT
+    /// Compatibility: dynamic selector lookup is limited to the legacy plugin bridge.
+    /// Constraint: keep the diagnostic exception scoped to this adapter and remove it once plugins expose typed entrypoints.
+    func bridgeBestComment(_ selectorName: String) {
+        bridgeNoComment(selectorName)
+    }
+
+    private func performSelector(named selectorName: String) {
+        _ = selectorName
     }
 }

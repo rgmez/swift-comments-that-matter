@@ -90,6 +90,39 @@ Good:
 Best:
 - "Performance: keep 10k-item decoding off the main actor; `SearchResults.trace` shows it otherwise exceeds the 100 ms interaction budget."
 
+## Golden 9 - Compiler Contract Over Prose
+
+Bad:
+- "Not thread-safe."
+
+Good:
+- "Isolation: writes stay on the main actor because SwiftUI observes this state."
+
+Best:
+- "Isolation: keep writes on the main actor; SwiftUI reads this state during body evaluation and expects UI mutations on that executor. A prose warning is weaker than the `@MainActor` boundary."
+
+## Golden 10 - Ownership And Lifetime
+
+Bad:
+- "Uses the connection handle."
+
+Good:
+- "Ownership: the upload session owns the handle until the stream closes."
+
+Best:
+- "Ownership: treat the handle as consumed once streaming starts. Lifetime: it remains valid only until server close or task cancellation, so retry paths must request a fresh handle."
+
+## Golden 11 - Compatibility Removal Condition
+
+Bad:
+- "Temporary workaround."
+
+Good:
+- "Compatibility: keep manual invalidation while the legacy Observation fallback is enabled."
+
+Best:
+- "Compatibility: manual invalidation exists only for the legacy Observation fallback. Remove it with the fallback flag; deleting it earlier leaves UIKit/AppKit adapters with stale tracked reads."
+
 ## Anti-Golden Examples
 
 - "This function does X..." style intros with no risk context.

@@ -97,6 +97,7 @@ Use only when needed:
 - `Isolation:`
 - `Ownership:`
 - `Lifetime:`
+- `Observation:`
 - `Backpressure:`
 - `Performance:`
 - `Compatibility:`
@@ -135,6 +136,7 @@ The skill must cover:
 - actor isolation, task ownership, and non-copyable ownership/lifetime constraints
 - stream ordering, cancellation, and backpressure
 - generated-code source-of-truth and regeneration boundaries
+- local diagnostic exceptions with a removal condition
 - performance constraints backed by reproducible evidence
 - compatibility workarounds with explicit removal conditions
 - background task scheduling limitations

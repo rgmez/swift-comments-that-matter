@@ -6,6 +6,20 @@ The format is based on Keep a Changelog.
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-08-05
+
+### Added
+- Added `Observation:` as an explicit supported comment signal in the skill entrypoint and canonical standard.
+- Added `modern-contracts.swift` coverage for compiler-enforced isolation, ownership and borrowed lifetime, compatibility fallbacks, and scoped diagnostic exceptions.
+- Added golden examples for compiler contracts over prose, ownership/lifetime boundaries, and compatibility removal conditions.
+
+### Changed
+- Expanded the modern-contracts example index to make the added WWDC26 coverage easier to discover.
+- Clarified that local diagnostic exceptions should include a removal condition.
+
+### Compatibility
+- No breaking changes to folder layout, adapter entrypoints, or install paths.
+
 ## [1.2.0] - 2026-07-05
 
 ### Added

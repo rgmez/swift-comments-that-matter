@@ -90,6 +90,8 @@ Use section labels only when they improve scanability. Keep each line specific.
   - `Ownership: the stream writer consumes this handle and is responsible for closing it.`
 - `Lifetime:`
   - `Lifetime: row state may reset when a lazy container discards an off-screen view.`
+- `Observation:`
+  - `Observation: keep this read inside the tracked context so mutations invalidate the adapter.`
 - `Backpressure:`
   - `Backpressure: await each outbound write to preserve server ordering.`
 - `Performance:`
@@ -151,6 +153,7 @@ Every scenario must include:
 - actor isolation, task ownership, and non-copyable ownership/lifetime constraints
 - stream ordering, cancellation, and backpressure
 - generated-code source-of-truth and regeneration boundaries
+- local diagnostic exceptions with a removal condition
 - performance constraints backed by reproducible evidence
 - compatibility workarounds with explicit removal conditions
 - background task scheduling limitations

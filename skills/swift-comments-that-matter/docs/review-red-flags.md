@@ -14,8 +14,12 @@ Use this list during PR review to spot low-signal comments fast.
 - Sounds timeless, but will rot after a small refactor
 - Uses `TODO`, `temporary`, or `workaround` without owner, issue, version, or removal condition
 - Claims performance wins without a metric, fixture, trace, benchmark, or budget
-- Documents generated output instead of the schema/specification/wrapper that owns the contract
+- Manually patches generated output instead of the schema, stable wrapper, or a DocC extension file for a resolvable symbol
 - Says `Concurrency:` when the actual risk is cancellation, isolation, ownership, lifetime, ordering, or backpressure
+- Uses a comment to justify ignoring a throwing `Task` result or compiler diagnostic
+- Protects a broad operation from cancellation without naming the point of no return
+- Treats `onAppear` as once-only initialization or promises exact lazy-view eviction timing
+- Duplicates an `@diagnose(reason:)` message without adding a removal condition or domain consequence
 
 ## Quick Rewrite Pattern
 
@@ -42,7 +46,11 @@ To:
 - What breaks if this behavior changes silently?
 - Which assumption is hidden here?
 - Is there a side effect that future maintainers can miss?
-- Could the compiler or a test enforce this instead?
+- Could the compiler or a test enforce this, while preserving the reason for that contract?
+- Is this claim disproved, or does it need evidence unavailable in this review?
+- Do executor claims match the module configuration and annotations?
 - What event makes this workaround/comment obsolete?
 - Is the source of truth the code being edited, or a schema/generated artifact?
 - If we delete this comment, do we lose safety-critical context?
+- Who owns this task's result, cancellation, and failure?
+- Could prefetch, repeated appearance, or delayed eviction invalidate this lifecycle claim?

@@ -1,6 +1,7 @@
 # WWDC26 Staff iOS Review: `swift-comments-that-matter`
 
-Fecha de revisión: 5 de julio de 2026
+Fecha de revisión inicial: 5 de julio de 2026
+Seguimientos: 18 de agosto y 25 de octubre de 2026
 
 ## Resumen ejecutivo
 
@@ -20,6 +21,60 @@ La skill actual cubre concurrencia, invariantes y SwiftUI, pero todavía lo hace
 con una taxonomía de Swift 5.9. La recomendación es evolucionarla a una versión
 orientada a Swift 6.3+ y Xcode 27, conservando compatibilidad con proyectos
 anteriores.
+
+## Seguimiento del 25 de octubre de 2026
+
+Los diagnósticos y el backlog iniciales de las secciones siguientes describen la
+revisión de julio; no son una lista de carencias actuales. Este seguimiento
+contrasta documentación y transcripciones, y separa recomendaciones de Apple de
+las decisiones editoriales aplicadas a la skill.
+
+| Fuente contrastada | Hecho de la fuente | Cambio aplicado |
+| --- | --- | --- |
+| [Swift Group Lab, 19:48](https://developer.apple.com/videos/play/wwdc2026/8001/?time=1188) | Las anotaciones explícitas pueden conservar una intención aunque sean inferibles; un comentario puede explicar el motivo. | La jerarquía compiler/tests/comment conserva la razón de los contratos deliberados. |
+| [Swift Group Lab, 33:39](https://developer.apple.com/videos/play/wwdc2026/8001/?time=2019) | La semántica de funciones async no aisladas evolucionó hacia el contexto del llamador. | Revisar configuración antes de afirmar que `async` o `nonisolated` ejecutan trabajo en background. |
+| [What’s new in Swift, 1:12](https://developer.apple.com/videos/play/wwdc2026/262/?time=72) | Se permiten llamadas async dentro de `defer`. | Nuevo ejemplo de recurso en memoria con cleanup esperado antes de retornar o propagar error. |
+| [Cancellation shields](https://developer.apple.com/documentation/swift/withtaskcancellationshield%28operation%3A%29-2lzl8) | Se oculta la observación de cancelación dentro del ámbito. | Limitar el shield al cleanup necesario sin prometer atomicidad ni recuperación exitosa. |
+| [Extensiones de documentación](https://developer.apple.com/documentation/Xcode/adding-supplemental-content-to-a-documentation-catalog) | DocC permite complementar o sustituir comentarios fuente desde un archivo externo dirigido a un símbolo. | Documentar símbolos generados resolubles sin editar sus archivos ni forzar un wrapper. |
+| [Documentation Preview](https://developer.apple.com/videos/play/wwdc2023/10244/?time=485) y [documentación de símbolos](https://developer.apple.com/documentation/xcode/writing-symbol-documentation-in-your-source-files) | Quick Help, preview y Build Documentation permiten inspeccionar el contenido compilado. | Verificación proporcional del resultado renderizado cuando el proyecto la soporte. |
+
+### Evidencia local y límites
+
+- Se reprodujo que el anterior `try? await Task.sleep` permitía publicar estado
+  después de cancelar. El ejemplo ahora sale ante error y comprueba cancelación
+  antes de publicar, incluso con un loader que no coopera.
+- La deduplicación de descargas ahora vive en un actor. La identidad de cada
+  entrada evita que la finalización de una petición retirada borre su reemplazo.
+- Se añaden regresiones ejecutables sin red y sin sleeps de coordinación para
+  publicación, coalescing, reemplazo, errores y finalización de streams.
+- El nuevo ejemplo de cleanup requiere Swift 6.4 y macOS 27 o la disponibilidad
+  indicada para las otras plataformas. En runtimes anteriores se comprueba el
+  código, pero se informa explícitamente que esa ejecución se omite.
+- La ausencia de evidencia local no prueba que un comentario sea falso:
+  `needs-evidence` conserva el texto hasta resolver su fundamento.
+- No se ha construido un proyecto DocC en este repositorio: las nuevas reglas
+  describen cómo verificarlo cuando la tarea y el proyecto lo permitan.
+
+## Seguimiento de implementación
+
+La revisión de agosto volvió a contrastar el catálogo y las transcripciones
+oficiales después de publicar las versiones 1.2.0 y 1.2.1. La mayor parte del
+backlog inicial ya estaba incorporada, pero aparecieron seis ajustes de calidad:
+
+| Fuente oficial | Ajuste aplicado a la skill |
+| --- | --- |
+| `What's new in Swift` | Un `Task` que puede fallar necesita un owner que observe el resultado; un comentario no sustituye `catch`, `await` ni la transferencia del handle. |
+| `What's new in Swift` | El motivo local de una excepción vive en `@diagnose(reason:)`; el comentario queda para consecuencias no locales o la condición verificable de retirada. |
+| `What's new in Swift` | Un cancellation shield debe limitarse al tramo que debe completar commit o rollback, dejando el trabajo preparatorio cancelable. La transcripción actual lo recomienda expresamente en 6:40; la atribución anterior como deducción propia era incorrecta. |
+| `Dive into lazy stacks and scrolling with SwiftUI` | No se garantiza ni liberación inmediata ni retención permanente: una vista off-screen puede conservarse durante varias actualizaciones y eliminarse después junto a su estado local. |
+| `Dive into lazy stacks and scrolling with SwiftUI` | El prefetch puede evaluar `body` sin que llegue a ejecutarse `onAppear`; además, `onAppear` puede repetirse tras reentrada. El setup obligatorio no debe depender de ese callback. |
+| `Use SwiftUI with AppKit and UIKit` | Los comentarios de Observation solo se justifican para lecturas que registran una dependencia implícita o para requisitos de back-deployment externos al símbolo. |
+
+No se añadieron reglas generales por cada API anunciada. App Intents Testing,
+Swift Testing, gRPC y las mejoras de Instruments refuerzan respectivamente las
+fronteras ya existentes de test ejecutable, fuente generada y evidencia de
+performance; duplicarlas como categorías nuevas habría aumentado ruido sin
+cambiar decisiones.
 
 ## Alcance y método
 
@@ -84,8 +139,10 @@ Swift 6.3/6.4 incorpora mejores diagnósticos para tareas que ignoran errores,
 `weak let`, conformidad negativa `~Sendable`, `@diagnose`, selectores de módulo,
 `@C`, mejoras de ownership y accessors `borrow`/`mutate`. La sesión
 [What’s new in Swift](https://developer.apple.com/videos/play/wwdc2026/262/)
-también introduce un cancellation shield cuya región debe mantenerse corta y
-dedicada a completar o revertir trabajo ya iniciado.
+también introduce un cancellation shield. La sesión recomienda expresamente en
+6:40 mantener corta su región y centrarla en terminar o revertir trabajo iniciado.
+La documentación añade que el shield oculta la observación de cancelación; no
+convierte la operación en una transacción atómica ni evita otros errores.
 
 Nueva regla propuesta:
 
@@ -212,8 +269,9 @@ La skill debe prohibir comentarios que parezcan autoridad normativa sin serlo:
 
 Nueva regla:
 
-> Un comentario operativo debe incluir una condición verificable de vigencia o
-> retirada. Si no puede verificarse, conviértelo en issue o elimínalo.
+> Un comentario operativo debe tener evidencia o una condición de revisión. Si
+> falta contexto, clasifícalo como `needs-evidence`, consérvalo provisionalmente e
+> identifica qué contrato, medición o responsable permite resolver la duda.
 
 ### 8. Performance: documentar presupuesto y evidencia, no intuición
 

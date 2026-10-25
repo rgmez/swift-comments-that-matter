@@ -4,9 +4,9 @@ Quick navigation for production-style comment rewrites (`no`, `bad`, `good`, `be
 
 - `concurrency.swift`
   - token refresh coalescing
-  - SwiftUI lifecycle task cancellation
+  - cancellation-aware publication with a loader that may ignore cancellation
 - `invariants.swift`
-  - download deduplication invariant
+  - actor-isolated download deduplication and identity-safe completion cleanup
   - cache eviction assumptions
 - `api-contracts.swift`
   - public SDK contract guarantees
@@ -18,13 +18,18 @@ Quick navigation for production-style comment rewrites (`no`, `bad`, `good`, `be
   - currency rounding constraints
   - settlement reconciliation safety
 - `modern-contracts.swift`
-  - compiler-enforced isolation over prose comments
-  - ownership and borrowed lifetime boundaries
+  - compiler-enforced isolation with no redundant internal comment
+  - single-use upload ownership and retry boundaries
   - cancellation point-of-no-return
-  - SwiftUI lazy lifetime and `.task(id:)` reentry
+  - narrowly scoped cancellation shields
+  - SwiftUI lazy retention/eviction, prefetch, `onAppear`, and `.task(id:)` reentry
+  - throwing-task result ownership
   - Observation implicit dependency reads
   - generated schema source-of-truth
-  - stream backpressure and performance evidence
+  - sequential stream sending versus producer backpressure, and illustrative performance evidence
   - compatibility fallbacks and diagnostic exceptions
+- `async-cleanup.swift`
+  - awaited cleanup under cancellation, using an in-memory resource model
+  - requires Swift 6.4 and macOS 27 / corresponding platform availability
 - `bad-comments.swift`
   - anti-pattern baselines for rewrite drills

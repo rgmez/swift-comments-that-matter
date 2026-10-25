@@ -2,6 +2,10 @@
 
 Use this checklist for pull requests and automated comment rewrites.
 
+Public API summaries are assessed for accurate observable behavior and usability;
+they do not need an additional hidden risk to justify their existence. The
+risk-focused checks below apply to internal rationale and contract details.
+
 ## Pass/Fail Checks
 
 - Comment explains intent, not mechanics.
@@ -12,6 +16,12 @@ Use this checklist for pull requests and automated comment rewrites.
 - Comment is not replacing a contract that should live in types, actor isolation, ownership, availability, diagnostics, tests, or preconditions.
 - Operational comments include evidence or an exit condition: issue, version, benchmark, trace, fixture, or removal event.
 - Generated-code comments point to the source of truth, not the generated artifact.
+- Throwing tasks have an explicit error/result owner; comments never excuse an ignored task outcome.
+- Cancellation comments state the publication or cleanup policy; shields cover only required cleanup or commit/rollback work.
+- Executor claims match the module settings and annotations rather than assuming `async` means background work.
+- Deliberate annotations and useful contract rationale survive cleanup even if a type or test enforces the behavior.
+- Lazy-container comments avoid exact eviction guarantees and treat `onAppear` as repeatable.
+- Diagnostic exceptions use a meaningful `@diagnose(reason:)`; comments add only non-local context or a removal condition.
 
 ## Scoring Rubric (0-2, Relevant Criteria Only)
 
@@ -58,6 +68,19 @@ Use `N/A` for criteria that do not apply to the code path. A local value-transfo
 - 60-84% of applicable points: acceptable but improvable
 - below 60% of applicable points: rewrite required
 
-Always fail a comment, regardless of score, when it repeats implementation, starts with a forbidden generic lead-in, or invents a risk that is not present in the code.
+Rewrite redundant implementation narration or demonstrably incorrect claims.
+Generic lead-ins are wording problems to improve, not automatic correctness
+failures. Useful API summaries need not include hidden risk.
 
-Also fail comments that look authoritative but cannot be verified: TODOs without an owner or exit condition, workarounds without a version/issue/removal event, performance claims without reproducible evidence, or comments that contradict the type system/tests.
+Use `needs-evidence` for unavailable rationale, ownership, measurements, or removal
+conditions. State what is missing without inventing proof or deleting a potentially
+valid restriction. When a comment contradicts verified behavior, flag the mismatch
+and propose an accurate replacement.
+
+For DocC edits, inspect Quick Help or Documentation Preview when available. Build
+documentation when symbol links, parameters, or page structure change and the
+project supports it; report checks that could not be performed. Markdown lint
+and Swift type-checking alone do not verify rendered documentation.
+
+Fail lifecycle guidance that treats an off-screen lazy view as immediately dead or
+permanently retained, or treats `onAppear` as guaranteed one-shot initialization.

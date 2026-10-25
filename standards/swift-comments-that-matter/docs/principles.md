@@ -19,7 +19,15 @@ Use the strongest source of truth available:
 - comments for intent, trade-offs, removal conditions, and failure modes that remain invisible
 - DocC for behavior that spans symbols, modules, or domain workflows
 
-Do not write "not thread-safe" if isolation, `Sendable`/`~Sendable`, or an actor boundary can make the contract explicit. Do not write "must never" if a test or precondition can enforce it.
+Do not substitute a "not thread-safe" warning for an enforceable boundary.
+Tests and preconditions can protect a "must never" invariant while documentation
+still explains why it matters. Keep intentional annotations when they preserve an
+API guarantee, even if inferred; explain the consequence of changing them.
+See [concurrency contracts](concurrency-contracts.md).
+
+A throwing `Task` needs a result owner, not a prose warning. Handle or await its
+error, or transfer the handle to a supervisor whose cancellation and teardown
+responsibilities are explicit.
 
 ## Risk-Centered Writing
 
@@ -33,7 +41,9 @@ Prioritize documenting:
 - generated-code sources of truth
 - compatibility or performance constraints with removal/evidence
 
-If no risk or hidden behavior exists, skip the comment.
+If no risk or hidden behavior exists, skip the internal comment. Public API
+reference documentation can still need an observable-behavior summary; see
+[DocC guidance](docc-guidance.md).
 
 ## Refactor Before Commenting
 
@@ -44,4 +54,11 @@ Only comment when refactoring cannot make the non-obvious part clear.
 
 A good comment reduces accidental regressions by preserving key assumptions and contracts during refactors.
 
-Operational comments must include a condition that keeps them honest: an issue, version, fixture, benchmark, trace, or event that says when the comment should be revisited or removed.
+Operational comments should point to an issue, version, fixture, benchmark, trace,
+or event that supports revisiting them. When that evidence is unavailable, mark
+`needs-evidence` and retain the text provisionally; lack of local evidence is not
+proof that a constraint is false.
+
+Framework-managed lifetime is not an implementation guarantee. For lazy SwiftUI
+content, document the domain state that must survive and the consequence of
+reentry; do not promise when the framework retains, prefetches, or evicts a view.

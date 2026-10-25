@@ -8,15 +8,21 @@ Canonical source:
 ## Rules
 
 - Prefer refactoring over low-value comments.
-- Write comments only for hidden intent, risk, constraints, invariants, side effects, and concurrency assumptions.
+- Keep internal comments for hidden intent, risk, constraints, invariants, side effects, and concurrency assumptions. Preserve useful public API summaries.
 - Never start with generic lead-ins like "This function...".
 - Keep output concise, specific, and production-oriented.
-- Include no/bad/good/best variants when asked for rewrites.
+- Return a final rewrite or deletion; include no/bad/good/best variants when explicitly requested.
 
 ## Deep References
 
 - `standards/swift-comments-that-matter/docs/`
 - `standards/swift-comments-that-matter/examples/`
+
+Refactor within the authorized scope; in comment-only work, propose code changes
+separately. Verify documented claims before treating them as facts. Use
+`needs-evidence` and preserve uncertain text provisionally when context is missing.
+Keep rationale for deliberate compiler-visible boundaries and verify executor
+claims against the module configuration.
 
 ## Quick Prompt
 

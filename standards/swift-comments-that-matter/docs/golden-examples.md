@@ -1,6 +1,7 @@
 # Golden Examples
 
-Use these as quality anchors.
+Use these as quality anchors. Domain constraints and named evidence artifacts
+are illustrative; verify them in the target project before adopting the wording.
 
 ## Golden 1 - Token Refresh Deduplication
 
@@ -22,7 +23,7 @@ Good:
 - "Keeps one active task per file key; duplicate requests subscribe to the same task."
 
 Best:
-- "Invariant: `activeTasks[fileKey]` owns the single network task for that file. Breaking this invariant causes duplicate writes and races when finalizing checksum validation."
+- "Invariant: each file key owns one reusable task. Completion of a cancelled request must not remove its replacement, or later callers can start another duplicate request."
 
 ## Golden 3 - Payment Capture Constraint
 
@@ -55,7 +56,7 @@ Good:
 - "Cancellation: once replacement starts, cleanup must complete before returning."
 
 Best:
-- "Cancellation: after the temporary file is swapped into place, cancellation is shielded until commit or rollback finishes. Exiting between those steps can leave neither version recoverable."
+- "Cancellation: shield only the swap-through-commit/rollback region. Preparation stays cancellable; exiting after the swap but before recovery finishes can leave neither version recoverable."
 
 ## Golden 6 - SwiftUI Lazy Lifetime
 
@@ -63,10 +64,10 @@ Bad:
 - "Stores row state."
 
 Good:
-- "Lifetime: row-local state is safe only for visual affordances that may reset after scrolling away."
+- "Lifetime: row-local state is safe only for visual affordances that may reset after eventual eviction."
 
 Best:
-- "Lifetime: `LazyVStack` may discard off-screen row state while the item remains in the domain model. Persist selection and in-flight work by stable item ID, not in the row view."
+- "Lifetime: `LazyVStack` may retain an off-screen row for several updates and later discard its local state. Persist selection and in-flight work by stable item ID; never depend on either immediate eviction or permanent retention."
 
 ## Golden 7 - Generated Source Of Truth
 
@@ -122,6 +123,74 @@ Good:
 
 Best:
 - "Compatibility: manual invalidation exists only for the legacy Observation fallback. Remove it with the fallback flag; deleting it earlier leaves UIKit/AppKit adapters with stale tracked reads."
+
+## Golden 12 - Throwing Task Result Ownership
+
+Bad:
+- "Starts the upload in a task."
+
+Good:
+- "Ownership: the caller retains and awaits the returned upload task."
+
+Best:
+- "Ownership: transfer the returned task to the upload supervisor, which owns cancellation and must observe its throwing result. Dropping the handle leaves retry state unchanged after a failed upload."
+
+## Golden 13 - Lazy Prefetch And Appearance
+
+Bad:
+- "Loads the row once when it appears."
+
+Good:
+- "Constraint: treat appearance as repeatable and make page requests idempotent."
+
+Best:
+- "Constraint: lazy prefetch can evaluate this row before display, and `onAppear` can run again after reentry. Keep mandatory setup outside the callback and coalesce page requests by stable page ID."
+
+## Golden 14 - Scoped Diagnostic Exception
+
+Bad:
+- "Ignore this warning."
+
+Good:
+- "Compatibility: the scoped diagnostic exception exists for the legacy selector bridge."
+
+Best:
+- "Compatibility: keep the immediate justification in `@diagnose(reason:)` and remove the exception with the legacy selector bridge. Do not widen it beyond this adapter, where it could hide unrelated diagnostics."
+
+## Golden 15 - No Internal Comment Needed
+
+Redundant:
+
+```swift
+// MainActor ensures main-actor isolation.
+@MainActor
+final class AccountSettingsStore {}
+```
+
+Best: remove the comment. The attribute already expresses isolation; no hidden
+reason or constraint has been supplied. Keep public API documentation separately
+if this type is exposed to consumers.
+
+## Golden 16 - Deliberate Compiler Contract
+
+Redundant:
+- "This annotation makes the type Sendable."
+
+Useful when confirmed by callers:
+- "Keep this type Sendable: the export coordinator transfers it to a worker actor; removing the conformance would change that supported use."
+
+The conformance enforces the boundary. The comment preserves why it is deliberate.
+
+## Golden 17 - Evidence Not Available
+
+Existing claim:
+- "Keep this fallback until provider P supports resumable uploads."
+
+Review outcome:
+- `needs-evidence`: the provider contract is not available in this review. Preserve the text and identify the provider documentation or integration owner needed to confirm it.
+
+Do not invent a provider version or delete the restriction solely because the
+local implementation cannot prove it.
 
 ## Anti-Golden Examples
 

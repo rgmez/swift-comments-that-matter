@@ -30,3 +30,12 @@ jobs:
         run: |
           diff -rq standards/swift-comments-that-matter/docs skills/swift-comments-that-matter/docs
           diff -rq standards/swift-comments-that-matter/examples skills/swift-comments-that-matter/examples
+
+  swift-examples:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Swift examples and behavior
+        run: python3 scripts/check_swift_examples.py

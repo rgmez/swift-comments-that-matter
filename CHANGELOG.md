@@ -6,6 +6,37 @@ The format is based on Keep a Changelog.
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-10-25
+
+### Added
+- Added `needs-evidence` for unresolved claims without deleting potentially valid constraints.
+- Added Apple-backed guidance for intentional annotations, executor configuration, async cleanup, and DocC extension files.
+- Added a Swift 6.4 async-cleanup example with explicit platform availability and a bounded in-memory resource model.
+- Added executable Swift regression checks and a macOS CI job for example behavior.
+- Added public API documentation guidance, evidence checks, and scope boundaries for comment-only reviews.
+- Added negative controls where compiler-visible contracts make internal comments unnecessary.
+- Added WWDC26 guidance for throwing-task result ownership, lazy-container prefetch/reentry, and scoped diagnostic exceptions.
+- Added golden and Swift examples for unobserved task failures and repeatable `onAppear` behavior.
+
+### Changed
+- Simplified the portable skill entrypoint and routed conditional details to focused references.
+- Fixed cancelled loads publishing stale UI state and made download deduplication actor-isolated with identity-safe completion cleanup.
+- Separated wording improvements from correctness failures and preserved rationale for compiler-enforced contracts.
+- Corrected the research report attribution for Apple's short cancellation-shield recommendation.
+- Reserved four-tier alternatives for teaching or explicit comparison requests.
+- Corrected stream ordering versus producer backpressure and normal completion semantics.
+- Made upload leases non-copyable and Observation dependencies observable in the modern examples.
+- Changed the search example to use request identity and cancellation checks, covering A-to-B-to-A reentry.
+- Replaced unsupported analytics/idempotency claims in the README example and labeled illustrative evidence.
+- Clarified that cancellation shields should cover only the commit/rollback region that must finish.
+- Corrected lazy-container guidance to avoid guarantees about immediate eviction or permanent retention.
+- Clarified that `@diagnose(reason:)` owns the local justification while comments carry only broader consequences or removal conditions.
+
+### Compatibility
+- No breaking changes to install paths, adapter entrypoints, or package layout.
+- Ordinary reviews now return a recommendation and final rewrite or deletion; request four-tier alternatives explicitly for teaching or comparison.
+- Public API summaries remain valid even when types or tests express their behavior.
+
 ## [1.2.1] - 2026-08-05
 
 ### Added

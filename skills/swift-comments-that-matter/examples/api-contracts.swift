@@ -1,5 +1,8 @@
 import Foundation
 
+// Profile retrieval and analytics delivery are stubs. External service and
+// finance constraints are illustrative; verify them before adopting the wording.
+
 // MARK: - Public API Contracts In Frameworks
 
 public struct SDKClient {
@@ -18,15 +21,19 @@ public struct SDKClient {
     }
 
     // 3) GOOD COMMENT
-    /// Contract: throws `invalidID` when `userID` is empty, instead of issuing a network call.
+    /// Returns profile data after validating the user identifier.
+    /// - Throws: `ContractError.invalidID` if `userID` is empty.
     public func fetchProfileGoodComment(userID: String) async throws -> Data {
         try await fetchProfileNoComment(userID: userID)
     }
 
     // 4) BEST COMMENT
-    /// Contract: validates `userID` locally and fails fast with `invalidID`.
-    /// Constraint: empty IDs must never hit transport to preserve server-side error budgets.
-    /// Why: consumers depend on this preflight behavior for predictable retry logic.
+    /// Returns profile data after validating the user identifier.
+    ///
+    /// - Parameter userID: A nonempty user identifier.
+    /// - Returns: The profile payload.
+    /// - Throws: `ContractError.invalidID` if `userID` is empty.
+    /// - Important: Empty identifiers fail locally before profile retrieval.
     public func fetchProfileBestComment(userID: String) async throws -> Data {
         try await fetchProfileNoComment(userID: userID)
     }

@@ -1,4 +1,9 @@
 import Foundation
+import Observation
+
+// Editorial examples: transport, file replacement, and diagnostic bridges below
+// are stubs. Their domain contracts illustrate wording, not verified runtime
+// guarantees. No benchmark or trace is bundled; measure before adopting claims.
 
 // MARK: - Compiler Contract Over Prose
 
@@ -17,52 +22,51 @@ final class MainActorStore {
         appendNoComment(value)
     }
 
-    // 3) GOOD COMMENT (useful)
-    /// Isolation: mutations must stay on the main actor because SwiftUI reads `values` during view updates.
+    // 3) GOOD OUTCOME: the actor boundary already expresses isolation.
+    // No additional UI consumer or hidden constraint is supplied in this example.
     func appendGoodComment(_ value: String) {
         appendNoComment(value)
     }
 
-    // 4) BEST COMMENT (intent + constraint + reasoning)
-    /// Isolation: keep writes on the main actor; SwiftUI observes `values` during body evaluation and expects UI state to change on that executor.
-    /// Why: a prose "not thread-safe" warning is weaker than the `@MainActor` boundary and should not be the source of truth for this contract.
+    // 4) BEST OUTCOME: omit redundant internal documentation.
+    // Preserve a public API summary separately if this type becomes public.
     func appendBestComment(_ value: String) {
         appendNoComment(value)
     }
 }
 
-// MARK: - Ownership And Borrowed Lifetime
+// MARK: - Single-Use Upload Ownership
 
-struct UploadLease {
+struct UploadLease: ~Copyable {
     let id: UUID
 }
 
 struct UploadCoordinator {
     // 1) NO COMMENT
-    func startNoComment(with lease: UploadLease) async {
+    func startNoComment(with lease: consuming UploadLease) async {
         await openConnection(for: lease)
     }
 
     // 2) BAD COMMENT
     /// This function uses the lease.
-    func startBadComment(with lease: UploadLease) async {
+    func startBadComment(with lease: consuming UploadLease) async {
         await startNoComment(with: lease)
     }
 
     // 3) GOOD COMMENT
-    /// Ownership: the coordinator owns the upload lease until the connection is closed.
-    func startGoodComment(with lease: UploadLease) async {
+    /// Ownership: a retry must request a fresh lease; this lease identifies one upload attempt.
+    func startGoodComment(with lease: consuming UploadLease) async {
         await startNoComment(with: lease)
     }
 
     // 4) BEST COMMENT
-    /// Ownership: treat the lease as consumed by the upload session; do not share it with retry paths after `openConnection` starts.
-    /// Lifetime: the lease remains valid only until the server closes the stream or the task is cancelled.
-    func startBestComment(with lease: UploadLease) async {
+    /// Ownership: request a fresh lease for retries; the server contract assigns each ID to one upload attempt.
+    /// Why: reusing an attempt ID can attach a retry to the previous server session.
+    func startBestComment(with lease: consuming UploadLease) async {
         await startNoComment(with: lease)
     }
 
-    private func openConnection(for lease: UploadLease) async {
+    private func openConnection(for lease: consuming UploadLease) async {
         _ = lease
     }
 }
@@ -91,7 +95,7 @@ struct AtomicFileReplacer {
     }
 
     // 4) BEST COMMENT (intent + constraint + reasoning)
-    /// Cancellation: after the staged file is swapped into place, cancellation is shielded until commit or rollback finishes.
+    /// Cancellation: shield only the swap-through-commit/rollback region; preparation remains cancellable.
     /// Invariant: callers must never observe a state where both the old and staged files are unrecoverable.
     /// Why: exiting between replacement and cleanup can leave neither version safe to restore.
     func commitBestComment() async throws {
@@ -121,29 +125,64 @@ struct FeedRowController {
     }
 
     // 3) GOOD COMMENT
-    /// Lifetime: row-local state may reset when a lazy container discards an off-screen row.
+    /// Lifetime: row-local state may reset when a lazy container eventually discards an off-screen row.
     mutating func restoreGoodComment(from expandedIDs: Set<UUID>) {
         restoreNoComment(from: expandedIDs)
     }
 
     // 4) BEST COMMENT
-    /// Lifetime: `LazyVStack` may discard this row while the item remains in the feed model.
-    /// Constraint: persist expansion by stable item ID, not in row-local state, so scrolling away cannot lose domain state.
+    /// Lifetime: `LazyVStack` may retain this off-screen row for several updates, then discard its local state while the feed item remains.
+    /// Constraint: persist expansion by stable item ID; never depend on either immediate eviction or permanent retention.
     mutating func restoreBestComment(from expandedIDs: Set<UUID>) {
         restoreNoComment(from: expandedIDs)
     }
 }
 
 @MainActor
+final class LazyPageLoader {
+    private var loadedPages: Set<Int> = []
+
+    // 1) NO COMMENT
+    func rowAppearedNoComment(page: Int) async {
+        guard loadedPages.insert(page).inserted else { return }
+        await fetchPage(page)
+    }
+
+    // 2) BAD COMMENT
+    /// Loads the page once when the row appears.
+    func rowAppearedBadComment(page: Int) async {
+        await rowAppearedNoComment(page: page)
+    }
+
+    // 3) GOOD COMMENT
+    /// Constraint: treat appearance as repeatable and coalesce requests by page.
+    func rowAppearedGoodComment(page: Int) async {
+        await rowAppearedNoComment(page: page)
+    }
+
+    // 4) BEST COMMENT
+    /// Constraint: lazy prefetch can evaluate a row before display, and `onAppear` can run again after reentry.
+    /// Why: mandatory setup belongs outside this callback; page requests remain idempotent through stable page identity.
+    func rowAppearedBestComment(page: Int) async {
+        await rowAppearedNoComment(page: page)
+    }
+
+    private func fetchPage(_ page: Int) async {
+        _ = page
+    }
+}
+
+@MainActor
 final class SearchViewModel {
-    private var latestQuery = ""
+    private var latestRequestID: UUID?
     private(set) var results: [String] = []
 
     // 1) NO COMMENT
     func searchNoComment(query: String) async {
-        latestQuery = query
+        let requestID = UUID()
+        latestRequestID = requestID
         let response = await fetchResults(query: query)
-        guard latestQuery == query else { return }
+        guard !Task.isCancelled, latestRequestID == requestID else { return }
         results = response
     }
 
@@ -161,7 +200,7 @@ final class SearchViewModel {
 
     // 4) BEST COMMENT
     /// Cancellation: `.task(id:)` may restart before the previous search completes.
-    /// Constraint: only the response matching `latestQuery` may mutate UI state, otherwise an older result can overwrite the visible query.
+    /// Constraint: identify each request separately; an A → B → A query sequence must not let the first A overwrite the last A.
     func searchBestComment(query: String) async {
         await searchNoComment(query: query)
     }
@@ -171,9 +210,40 @@ final class SearchViewModel {
     }
 }
 
+// MARK: - Throwing Task Result Ownership
+
+struct ReportUploadCoordinator {
+    // 1) NO COMMENT
+    func startNoComment() -> Task<Void, Error> {
+        Task { try await upload() }
+    }
+
+    // 2) BAD COMMENT
+    /// Starts the upload in a task.
+    func startBadComment() -> Task<Void, Error> {
+        startNoComment()
+    }
+
+    // 3) GOOD COMMENT
+    /// Ownership: the caller retains and awaits the returned upload task.
+    func startGoodComment() -> Task<Void, Error> {
+        startNoComment()
+    }
+
+    // 4) BEST COMMENT
+    /// Ownership: transfer this task to the upload supervisor, which owns cancellation and must observe its throwing result.
+    /// Risk: dropping the handle leaves retry state unchanged after a failed upload.
+    func startBestComment() -> Task<Void, Error> {
+        startNoComment()
+    }
+
+    private func upload() async throws {}
+}
+
 // MARK: - Observation Implicit Dependencies
 
 @MainActor
+@Observable
 final class BadgePresenter {
     var unreadCount = 0
 
@@ -190,14 +260,14 @@ final class BadgePresenter {
     }
 
     // 3) GOOD COMMENT
-    /// Observation: the `unreadCount` read registers this title for invalidation.
+    /// Observation: when called inside observation tracking, this read registers `unreadCount` as a dependency.
     func titleGoodComment() -> String {
         titleNoComment()
     }
 
     // 4) BEST COMMENT
     /// Observation: keep the `unreadCount` read inside the tracked title calculation.
-    /// Why: UIKit/AppKit observation only invalidates this adapter when the dependency is read during tracking, even though the value is not rendered directly.
+    /// Why: callers that track this calculation need unread-count changes to invalidate it, even though the count is not rendered in the title.
     func titleBestComment() -> String {
         titleNoComment()
     }
@@ -235,7 +305,7 @@ struct OrdersClientWrapper {
     }
 }
 
-// MARK: - Streams, Backpressure, And Performance Evidence
+// MARK: - Stream Ordering, Buffering, And Performance Evidence
 
 struct MessageStreamWriter {
     // 1) NO COMMENT
@@ -252,14 +322,14 @@ struct MessageStreamWriter {
     }
 
     // 3) GOOD COMMENT
-    /// Backpressure: send each message only after the previous write is accepted.
+    /// Ordering: complete each outbound send before starting the next.
     func writeGoodComment(_ messages: AsyncStream<String>) async {
         await writeNoComment(messages)
     }
 
     // 4) BEST COMMENT
-    /// Backpressure: preserve server ordering by awaiting each outbound write before reading the next message.
-    /// Cancellation: closing `messages` is the producer's cancellation signal; do not drain buffered UI events after the stream ends.
+    /// Ordering: this consumer sends sequentially; producer buffering and backpressure are separate contracts.
+    /// Lifetime: normal stream completion drains buffered messages. Callers requiring discard-on-cancel need a separate cancellation policy.
     func writeBestComment(_ messages: AsyncStream<String>) async {
         await writeNoComment(messages)
     }
@@ -288,8 +358,8 @@ struct SearchDecoder {
     }
 
     // 4) BEST COMMENT
-    /// Performance: keep 10k-item decoding off the main actor; `SearchResults.trace` shows it otherwise exceeds the 100 ms interaction budget.
-    /// Constraint: update the trace or remove this comment if the fixture size or interaction budget changes.
+    /// Performance: if a measured 10k-item fixture exceeds the interaction budget, callers should move decoding off the main actor.
+    /// Evidence: replace this illustrative condition with the actual benchmark and budget before adopting it in a project.
     func decodeBestComment(_ data: Data) throws -> [String] {
         try decodeNoComment(data)
     }
@@ -348,8 +418,8 @@ struct DiagnosticException {
     }
 
     // 4) BEST COMMENT
-    /// Compatibility: dynamic selector lookup is limited to the legacy plugin bridge.
-    /// Constraint: keep the diagnostic exception scoped to this adapter and remove it once plugins expose typed entrypoints.
+    /// Compatibility: keep the diagnostic exception scoped to this legacy selector bridge and put its immediate justification in `@diagnose(reason:)`.
+    /// Constraint: remove the exception once plugins expose typed entrypoints; widening it can hide unrelated diagnostics.
     func bridgeBestComment(_ selectorName: String) {
         bridgeNoComment(selectorName)
     }

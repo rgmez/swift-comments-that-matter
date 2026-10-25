@@ -8,7 +8,8 @@ This project takes a different approach:
 
 `Write comments only for what the code cannot explain.`
 
-If your comment explains the code, it is already failing.
+Internal comments should add context beyond the implementation.
+Public API documentation still needs a useful behavior summary.
 Comments are often a symptom of weak naming.
 Refactor first. Comment risk, contracts, and what must not break.
 
@@ -21,11 +22,12 @@ Refactor first. Comment risk, contracts, and what must not break.
 - Comment concurrency risks.
 - Prefer compiler-visible contracts and tests before prose.
 - Give workarounds, performance notes, and generated-code comments a verifiable source of truth.
+- Use `needs-evidence` when context is missing; do not erase a restriction merely because it cannot be verified locally.
 
 ## Quick Start (30s)
 
 1. Open `standards/swift-comments-that-matter/STANDARD.md`.
-2. Run your rewrite with the `no -> bad -> good -> best` pattern.
+2. Return a final rewrite or deletion; use `no -> bad -> good -> best` for teaching.
 3. Apply the PR checklist in this README before merging.
 
 ## Non-Goals
@@ -51,25 +53,19 @@ Poll article:
 ## Before vs After
 
 ```swift
-// Before (bad)
-/// Fetches the user profile
-func fetchUserProfile() async throws -> User {
-    try await api.getUser()
+// Before (redundant)
+/// Stores the response.
+func apply(_ response: SearchResponse) {
+    guard response.requestID == activeRequestID else { return }
+    results = response.items
 }
 
 // After (high-signal)
-/// Fetches the user profile.
-///
-/// - Important:
-///   Not idempotent - triggers a network request each time.
-///
-/// - Side Effects:
-///   Emits analytics event `profile_requested`.
-///
-/// - Why:
-///   Used to track user engagement when entering the profile screen.
-func fetchUserProfile() async throws -> User {
-    try await api.getUser()
+// Compare request IDs, not query text: A → B → A must not let the first
+// response overwrite the final search, even though both queries are equal.
+func apply(_ response: SearchResponse) {
+    guard response.requestID == activeRequestID else { return }
+    results = response.items
 }
 ```
 
@@ -80,7 +76,8 @@ func fetchUserProfile() async throws -> User {
 - The logic is trivial and has no hidden risk.
 - The comment is likely to rot faster than the code.
 
-If you feel the need to explain what the code does, the code probably needs refactoring.
+For internal implementation comments, consider whether naming or structure can
+carry the explanation. Preserve useful public API summaries.
 
 ## Painful Real Examples
 
@@ -103,24 +100,10 @@ func refreshSessionIfNeeded() async throws {
     }
 }
 
-// Where this standard helps
-/// Refreshes the session token if needed.
-///
-/// - Important:
-///   Not concurrency-safe.
-///   Multiple calls may trigger multiple refresh requests.
-///
-/// - Why:
-///   We avoid locking here to keep this layer stateless.
-///   Synchronization is handled at a higher level.
-///
-/// - Risk:
-///   Calling this from multiple async contexts can duplicate refresh requests.
-func refreshSessionIfNeeded() async throws {
-    if token.isExpired {
-        token = try await authService.refreshToken()
-    }
-}
+// Review outcome: a comment does not fix the concurrent refresh bug.
+// Coalesce refreshes in an actor and preserve the reason for that contract:
+// simultaneous refreshes may invalidate a rotating token chain.
+// See the complete TokenRefresher example in examples/concurrency.swift.
 ```
 
 ## What You Get
@@ -128,10 +111,11 @@ func refreshSessionIfNeeded() async throws {
 - Canonical tool-agnostic standard
 - Adapter entrypoints for Cursor, Claude, and Codex
 - Production-style Swift examples (`no`, `bad`, `good`, `best`)
-- Modern Swift examples for cancellation, ownership/lifetime, Observation, generated code, and performance evidence
+- Modern Swift examples for task-result ownership, cancellation, lazy-container prefetch/lifetime, Observation, generated code, and performance evidence
 - Decision rules with refactor-first guidance
 - Review checklist and scoring rubric
-- DocC boundary guidance (`///` vs DocC article)
+- DocC boundary guidance, documentation extensions for generated symbols, and rendered verification
+- Executable checks for cancellation-safe publication and shared download lifetime
 
 ## Aligned With Apple Documentation Style
 
@@ -247,6 +231,19 @@ Expected:
 - avoids generic intros like "This function..."
 - includes constraints, risks, side effects, or invariants where relevant
 
+## Validate The Examples
+
+On macOS with Swift 6 installed:
+
+```bash
+python3 scripts/check_swift_examples.py
+```
+
+The runner type-checks each Swift file and checks cancellation-safe publication,
+shared download cleanup/retry, and stream completion without network requests.
+It reports skipped scenarios when a newer compiler or runtime is required. DocC
+rendering is checked in the consuming project when its documentation is edited.
+
 ## Tone And Guardrails
 
 - Human, direct, engineer-to-engineer
@@ -258,7 +255,8 @@ Expected:
 
 - Changelog: `CHANGELOG.md`
 - Release guide: `.github/RELEASE_TEMPLATE.md`
-- Latest draft notes: `.github/RELEASE_NOTES_1.2.1.md`
+- Release: `v1.3.0`
+- Release notes: [.github/RELEASE_NOTES_1.3.0.md](.github/RELEASE_NOTES_1.3.0.md)
 
 ## License
 

@@ -52,6 +52,8 @@ skills/swift-comments-that-matter/
 - `examples/concurrency.swift`
 - `examples/modern-contracts.swift`
 - `examples/pricing-rounding.swift`
+- `examples/async-cleanup.swift`
+- `docs/concurrency-contracts.md`
 - `docs/review-red-flags.md`
 
 ## Maintenance Policy
@@ -64,7 +66,8 @@ skills/swift-comments-that-matter/
 ## Definition Of Done
 
 - All required scenarios are covered.
-- Each scenario includes no-comment, bad, good, and best tiers.
+- Teaching scenarios use four tiers; negative controls may show deletion alone.
+- Ordinary reviews return the recommendation and final text, with `needs-evidence` for unresolved claims.
 - Rubric scores can be applied consistently.
 - Internal links are valid.
 - Style stays direct, human, and non-generic.

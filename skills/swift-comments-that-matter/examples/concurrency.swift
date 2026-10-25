@@ -57,35 +57,56 @@ actor TokenRefresher {
 @MainActor
 final class FeedViewModel {
     private var loadTask: Task<Void, Never>?
+    private let load: @Sendable () async throws -> [String]
     private(set) var items: [String] = []
 
+    init(load: @escaping @Sendable () async throws -> [String] = {
+        try await Task.sleep(for: .milliseconds(60))
+        return ["A", "B", "C"]
+    }) {
+        self.load = load
+    }
+
     // 1) NO COMMENT
-    func onAppearNoComment() {
+    @discardableResult
+    func onAppearNoComment() -> Task<Void, Never> {
         loadTask?.cancel()
-        loadTask = Task { [weak self] in
-            guard let self else { return }
-            try? await Task.sleep(for: .milliseconds(60))
-            items = ["A", "B", "C"]
+        let task = Task { [weak self, load] in
+            do {
+                let response = try await load()
+                guard !Task.isCancelled else { return }
+                self?.items = response
+            } catch {
+                return
+            }
         }
+        loadTask = task
+        return task
     }
 
     // 2) BAD COMMENT
     /// This method loads data when the view appears.
-    func onAppearBadComment() {
+    @discardableResult
+    func onAppearBadComment() -> Task<Void, Never> {
         onAppearNoComment()
     }
 
     // 3) GOOD COMMENT
-    /// Cancels any prior load task before starting a new one for the latest view appearance.
-    func onAppearGoodComment() {
+    /// Ignores a cancelled load's response even when the loader completes normally.
+    @discardableResult
+    func onAppearGoodComment() -> Task<Void, Never> {
         onAppearNoComment()
     }
 
     // 4) BEST COMMENT
     /// Concurrency: view re-appear events can arrive faster than network completion.
-    /// Constraint: keep only the most recent load task to avoid stale writes from older responses.
-    /// Side Effects: replacing `items` is a UI state mutation and must remain on the main actor.
-    func onAppearBestComment() {
+    /// Constraint: cancellation must prevent publication even if the transport ignores it; failed loads preserve the last successful items.
+    @discardableResult
+    func onAppearBestComment() -> Task<Void, Never> {
         onAppearNoComment()
+    }
+
+    func cancelLoad() {
+        loadTask?.cancel()
     }
 }

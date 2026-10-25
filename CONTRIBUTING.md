@@ -28,19 +28,22 @@ Thanks for contributing to `swift-comments-that-matter`.
 ## Reject Criteria For New Examples
 
 - Trivial logic (getters/setters, toy math, or tutorial snippets).
-- No real risk, invariant, or side effect.
+- No useful contract, decision context, or focused negative-control purpose.
 - Duplicates an existing scenario without new constraints.
-- Explains "what the code does" instead of "what must not break".
+- Narrates internal mechanics without decision context; useful symbol summaries remain valid.
 
 ## Example Quality Requirements
 
-Every scenario must include:
+Teaching scenarios with hidden context use:
 1. no comment
 2. bad comment
 3. good comment
 4. best comment (intent + constraints + reasoning)
 
-Examples must include realistic risk or constraints and avoid trivial logic.
+Examples must include realistic risk or constraints and avoid trivial logic,
+except negative controls that demonstrate deleting redundant internal comments.
+Label hypothetical measurements and external contracts as illustrative.
+Preserve unresolved claims as `needs-evidence` instead of inventing proof.
 
 ## Pull Request Checklist
 
@@ -48,6 +51,7 @@ Examples must include realistic risk or constraints and avoid trivial logic.
 - [ ] References and links are valid
 - [ ] Mirrored `standards/` and `skills/` docs/examples stay synchronized
 - [ ] Docs Checks CI passes (`.github/workflows/docs-checks.yml`)
+- [ ] Run `python3 scripts/check_swift_examples.py` on macOS for example changes; report compiler/runtime skips
 - [ ] New examples follow required scenario pattern
 - [ ] No low-signal boilerplate comments introduced
 - [ ] README/docs remain tool-agnostic by default

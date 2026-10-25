@@ -55,6 +55,19 @@ las decisiones editoriales aplicadas a la skill.
 - No se ha construido un proyecto DocC en este repositorio: las nuevas reglas
   describen cómo verificarlo cuando la tarea y el proyecto lo permitan.
 
+### Cierre de validación de macOS 27
+
+El 25 de octubre de 2026 se ejecutó el escenario en macOS 27.0.1 (26A434),
+Xcode 27.1 (27A9275) y Swift 6.4. El job
+[`swift-cleanup-macos27`](https://github.com/rgmez/swift-comments-that-matter/actions/runs/40178720071/job/121124959108)
+confirmó que el cleanup se espera antes de devolver cancelación o un error de
+la operación. El log contiene `PASS: shielded cleanup is awaited after cancellation and failure`.
+
+El ejemplo y sus assertions coinciden con el tag `v1.3.0`. El commit de ejecución
+`d5cccbb` añade el runner explícito y `--require-async-cleanup`, que falla si no
+están disponibles Swift 6.4 y macOS 27. La limitación de ejecución local en macOS
+26 permanece; la comprobación pendiente de la release queda resuelta por esta CI.
+
 ## Seguimiento de implementación
 
 La revisión de agosto volvió a contrastar el catálogo y las transcripciones

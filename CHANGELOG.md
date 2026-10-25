@@ -6,6 +6,12 @@ The format is based on Keep a Changelog.
 
 ## [Unreleased]
 
+### Fixed
+- Added a required macOS 27 / Swift 6.4 CI job for shielded async cleanup; unsupported environments fail instead of silently skipping it.
+
+### Validation
+- Verified the v1.3.0 cleanup example and assertions on macOS 27.0.1, Xcode 27.1, and Swift 6.4 after release.
+
 ## [1.3.0] - 2026-10-25
 
 ### Added

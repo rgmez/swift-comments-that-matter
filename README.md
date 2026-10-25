@@ -244,6 +244,16 @@ shared download cleanup/retry, and stream completion without network requests.
 It reports skipped scenarios when a newer compiler or runtime is required. DocC
 rendering is checked in the consuming project when its documentation is edited.
 
+To require the shielded-cleanup scenario instead of accepting a skip, run on
+macOS 27 with Swift 6.4 or newer:
+
+```bash
+python3 scripts/check_swift_examples.py --require-async-cleanup
+```
+
+CI runs this mode in the dedicated `swift-cleanup-macos27` job. An unsupported
+compiler or runtime fails the job.
+
 ## Tone And Guardrails
 
 - Human, direct, engineer-to-engineer

@@ -41,8 +41,17 @@ includes source links and corrects the attribution of the short-shield recommend
 - [x] Type-check all standalone examples in Swift 6 language mode with Swift 6.4
 - [x] Run deterministic regressions for cancelled/failed UI publication, download sharing/replacement/retry, and normal stream completion
 - [x] Forward-test the skill independently on summaries, missing evidence, DocC extensions, and executor assumptions
-- [ ] Execute shielded async-cleanup checks on macOS 27 (unavailable on the local macOS 26 runtime)
+- [x] Execute shielded async-cleanup checks on macOS 27 — [successful CI run](https://github.com/rgmez/swift-comments-that-matter/actions/runs/40178720071/job/121124959108)
 
 Type-checking does not verify the runtime contracts of stub transports, durable
 file replacement, or hypothetical benchmarks. No consuming DocC project was
 built; rendered checks belong to a project with resolvable documentation symbols.
+
+## Post-release runtime verification
+
+On October 25, 2026, the required cleanup job passed on macOS 27.0.1 (26A434),
+Xcode 27.1 (27A9275), and Swift 6.4. The tested cleanup example and assertions
+match tag `v1.3.0`. The job verified that cleanup completes before cancellation
+or operation failure returns, and reported no skipped cleanup scenario.
+
+[Execution log](https://github.com/rgmez/swift-comments-that-matter/actions/runs/40178720071/job/121124959108).

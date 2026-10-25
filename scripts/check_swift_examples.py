@@ -5,8 +5,10 @@ Requires macOS and Swift 6. Newer feature examples declare compiler and runtime
 availability; skipped runtime scenarios are reported by the executable.
 """
 
+import argparse
 from pathlib import Path
 import platform
+import re
 import subprocess
 import sys
 import tempfile
@@ -17,12 +19,31 @@ def run(command: list[str], *, timeout: int = 60) -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--require-async-cleanup",
+        action="store_true",
+        help="Fail unless the Swift 6.4/macOS 27 cleanup scenario can execute.",
+    )
+    args = parser.parse_args()
     if sys.platform != "darwin":
         print("Swift example checks require macOS and its Foundation SDK.", file=sys.stderr)
         return 1
     root = Path(__file__).resolve().parent.parent
     examples = root / "skills/swift-comments-that-matter/examples"
-    run(["swiftc", "--version"])
+    version = subprocess.check_output(["swiftc", "--version"], text=True, timeout=30)
+    print(version, end="", flush=True)
+    compiler_match = re.search(r"Swift version (\d+)\.(\d+)", version)
+    if compiler_match is None:
+        print("Unable to determine the Swift compiler version.", file=sys.stderr)
+        return 1
+    compiler_version = tuple(map(int, compiler_match.groups()))
+    os_version = platform.mac_ver()[0]
+    print(f"macOS version: {os_version}", flush=True)
+    cleanup_supported = compiler_version >= (6, 4) and int(os_version.split(".")[0]) >= 27
+    if args.require_async_cleanup and not cleanup_supported:
+        print("Required cleanup scenario needs Swift 6.4 and macOS 27; refusing to skip.", file=sys.stderr)
+        return 1
     with tempfile.TemporaryDirectory(prefix="swift-comment-contracts-") as scratch:
         common = [
             "swiftc", "-swift-version", "6", "-warnings-as-errors",
@@ -36,7 +57,7 @@ def main() -> int:
         runtime_flags = []
         # New concurrency runtime symbols must not enter an older OS executable,
         # even when a source-level availability branch would skip the function.
-        if int(platform.mac_ver()[0].split(".")[0]) >= 27:
+        if cleanup_supported:
             runtime_sources.append(str(examples / "async-cleanup.swift"))
             runtime_flags = ["-D", "CAN_RUN_ASYNC_CLEANUP"]
         run([

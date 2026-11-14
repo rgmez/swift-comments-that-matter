@@ -74,4 +74,4 @@ skills/swift-comments-that-matter/
 
 ## License
 
-MIT License. See the repository root `LICENSE`.
+MIT License. See the bundled [LICENSE](LICENSE).

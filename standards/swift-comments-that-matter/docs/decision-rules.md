@@ -2,7 +2,12 @@
 
 ## Pre-Comment Gate
 
-Before writing a comment, ask:
+First distinguish symbol documentation, implementation rationale, and comments
+consumed by tools or required notices. Preserve directive syntax, placement,
+scope, and legal headers during prose cleanup; change them only when that work
+is explicitly in scope and their effect can be checked.
+
+Before writing implementation commentary, ask:
 
 1. Can I improve naming instead?
 2. Can the type system, actor isolation, ownership, availability, diagnostics, tests, or preconditions express this contract?
@@ -104,9 +109,13 @@ Staff-level quality:
 
 ## Output Rule
 
-For ordinary reviews, return the classification, reason, and final rewrite
-(or deletion). If correctness depends on missing context, state the evidence gap
-and what would resolve it, preserving the existing text provisionally.
+For ordinary reviews, return actionable findings with location, classification,
+reason, and final rewrite (or deletion). Separate verified correctness problems,
+optional editorial improvements, and evidence gaps; a stylistic opening alone
+is not a correctness failure. Omit unchanged comments unless they help explain a
+finding. Include a complete inventory only when requested. If correctness depends
+on missing context, state the evidence gap and what would resolve it, preserving
+the existing text provisionally.
 When explicitly asked for four alternatives, output:
 - no comment
 - bad
@@ -115,7 +124,8 @@ When explicitly asked for four alternatives, output:
 
 ## Audit Classification
 
-When reviewing existing comments, classify each one:
+Use these classifications for reported findings. A complete audit may classify
+every comment; an ordinary review need not list each one:
 
 - `keep` - high-signal and still accurate
 - `refactor` - naming or structure should carry the meaning

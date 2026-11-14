@@ -6,22 +6,38 @@ Public API summaries are assessed for accurate observable behavior and usability
 they do not need an additional hidden risk to justify their existence. The
 risk-focused checks below apply to internal rationale and contract details.
 
-## Pass/Fail Checks
+## Correctness And Contract Checks
 
-- Comment explains intent, not mechanics.
-- Comment captures at least one real risk, constraint, or invariant.
-- Comment avoids generic openings like "This function...".
-- Comment is concise and specific to this code path.
-- Comment helps a future refactor avoid breaking behavior.
-- Comment is not replacing a contract that should live in types, actor isolation, ownership, availability, diagnostics, tests, or preconditions.
-- Operational comments include evidence or an exit condition: issue, version, benchmark, trace, fixture, or removal event.
-- Generated-code comments point to the source of truth, not the generated artifact.
+- Claims match verified behavior and available contracts; do not invent rationale or guarantees.
+- Comments are not used to excuse code bugs or replace an enforceable contract.
+- Generated-code changes target the source of truth, not generated output.
+- Tooling directives, generator markers, and required notices retain their syntax, placement, and scope during editorial cleanup.
 - Throwing tasks have an explicit error/result owner; comments never excuse an ignored task outcome.
 - Cancellation comments state the publication or cleanup policy; shields cover only required cleanup or commit/rollback work.
 - Executor claims match the module settings and annotations rather than assuming `async` means background work.
 - Deliberate annotations and useful contract rationale survive cleanup even if a type or test enforces the behavior.
 - Lazy-container comments avoid exact eviction guarantees and treat `onAppear` as repeatable.
 - Diagnostic exceptions use a meaningful `@diagnose(reason:)`; comments add only non-local context or a removal condition.
+
+Report a verified mismatch as a correctness finding. In comment-only work, report
+code bugs separately without implementing a fix or presenting the bug as intended.
+
+## Editorial Improvements
+
+- Internal commentary explains useful intent, risk, constraints, or invariants beyond obvious mechanics.
+- Wording is concise and specific to the code path.
+- Generic openings such as "This function..." can be shortened when that improves clarity; they do not alone make a comment incorrect or worth deleting.
+- Useful symbol summaries remain valid even when the signature or implementation expresses the same behavior.
+
+Treat these as optional wording improvements unless redundancy leaves no useful
+context. Do not manufacture a risk or constraint just to satisfy the checklist.
+
+## Evidence Gaps
+
+Operational comments should include evidence or a meaningful revisit condition:
+an issue, version, benchmark, trace, fixture, or removal event. If that support is
+unavailable, use `needs-evidence`, preserve the claim provisionally, and identify
+what reference or owner could resolve it. An evidence gap is not proof of error.
 
 ## Scoring Rubric (0-2, Relevant Criteria Only)
 
@@ -66,9 +82,11 @@ Use `N/A` for criteria that do not apply to the code path. A local value-transfo
 
 - 85-100% of applicable points: strong
 - 60-84% of applicable points: acceptable but improvable
-- below 60% of applicable points: rewrite required
+- below 60% of applicable points: inspect for a useful rewrite
 
-Rewrite redundant implementation narration or demonstrably incorrect claims.
+Scores guide editorial review; they do not override correctness, preservation of
+useful symbol summaries, or `needs-evidence`. Do not use a score alone to justify
+deletion. Rewrite redundant implementation narration or demonstrably incorrect claims.
 Generic lead-ins are wording problems to improve, not automatic correctness
 failures. Useful API summaries need not include hidden risk.
 

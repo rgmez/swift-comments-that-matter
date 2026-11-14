@@ -6,6 +6,22 @@ The format is based on Keep a Changelog.
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-14
+
+### Added
+- Added seven review-behavior cases with independent grading criteria and a documented manual evaluation procedure.
+- Bundled the MIT license with the portable skill so standalone installations retain the license terms.
+
+### Changed
+- Separated verified correctness findings, optional editorial improvements, and unresolved evidence gaps throughout the review guidance.
+- Protected tooling directives, generator markers, and required notices during editorial cleanup.
+- Made actionable findings the default review output, with complete inventories reserved for explicit requests.
+- Made rubric scores advisory rather than automatic grounds for rewriting or deleting useful documentation.
+
+### Compatibility
+- No breaking changes to install paths, adapters, or review classifications.
+- Behavior evaluation remains a manual agent check, separate from automated CI and real application verification.
+
 ### Fixed
 - Added a required macOS 27 / Swift 6.4 CI job for shielded async cleanup; unsupported environments fail instead of silently skipping it.
 

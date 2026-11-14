@@ -1,5 +1,6 @@
 ---
 name: swift-comments-that-matter
+license: MIT
 description: Review and write Swift comments and DocC symbol documentation. Use to preserve API contracts, explain non-obvious intent or lifecycle constraints, and remove redundant implementation commentary. Applies to comment-focused work, not general Swift refactoring or concurrency migrations.
 ---
 
@@ -19,6 +20,12 @@ Write documentation that helps consumers use an API and maintainers change it sa
 
 Do not delete useful API summaries just because types or tests express behavior.
 Do not add internal commentary when no context would be lost without it.
+
+Comments consumed by tools or required notices are not ordinary prose. Preserve
+lint/formatter directives, generator markers, and license/copyright headers during
+editorial cleanup. If a change to one is explicitly in scope, check its syntax,
+placement, and affected region against the relevant configuration or generator;
+do not remove it merely because it lacks explanatory value.
 
 ## Review Or Rewrite
 
@@ -46,7 +53,9 @@ resolve it; do not invent business reasons, issues, measurements, or guarantees.
 
 For each actionable review finding, give the location, recommendation, reason,
 and final text when justified. Identify evidence gaps when they affect the
-recommendation. Report unchanged comments only when useful to the requested review.
+recommendation. Return actionable findings by default; report unchanged comments
+only when useful or when the user requests a complete inventory. Separate verified
+errors, optional wording improvements, and unresolved evidence gaps.
 
 ## Writing Rules
 

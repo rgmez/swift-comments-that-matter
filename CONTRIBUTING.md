@@ -51,6 +51,7 @@ Preserve unresolved claims as `needs-evidence` instead of inventing proof.
 - [ ] References and links are valid
 - [ ] Mirrored `standards/` and `skills/` docs/examples stay synchronized
 - [ ] Docs Checks CI passes (`.github/workflows/docs-checks.yml`)
+- [ ] For changes to review decisions, run the [review behavior evaluation](tests/skill-review/README.md) and report observed results and limitations separately from CI
 - [ ] Run `python3 scripts/check_swift_examples.py` on macOS for example changes; report compiler/runtime skips
 - [ ] New examples follow required scenario pattern
 - [ ] No low-signal boilerplate comments introduced

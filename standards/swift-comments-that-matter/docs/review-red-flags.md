@@ -1,10 +1,16 @@
 # Review Red Flags
 
-Use this list during PR review to spot low-signal comments fast.
+Use this list during PR review to spot comments worth examining. These are
+signals, not automatic correctness failures or grounds for deletion. Assess
+symbol documentation for useful observable behavior; it need not describe a
+hidden risk. Treat missing external support as `needs-evidence`.
+
+Exclude tooling directives, generator markers, and required notices from prose
+cleanup; preserve their syntax, placement, and affected region.
 
 ## Red Flags
 
-- Starts with "This function..." or "This method..."
+- Uses a generic opening such as "This function..." that could be shortened without losing useful behavior or context
 - Repeats the function name with no extra context
 - Narrates obvious control flow line-by-line
 - States intent without any boundary, risk, or consequence

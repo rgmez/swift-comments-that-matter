@@ -188,7 +188,7 @@ Useful commands:
 
 ```bash
 # List skills available in this repo
-npx skills list rgmez/swift-comments-that-matter
+npx skills add rgmez/swift-comments-that-matter --list
 
 # List installed skills
 npx skills list
@@ -265,8 +265,8 @@ compiler or runtime fails the job.
 
 - Changelog: `CHANGELOG.md`
 - Release guide: `.github/RELEASE_TEMPLATE.md`
-- Release: `v1.3.0`
-- Release notes: [.github/RELEASE_NOTES_1.3.0.md](.github/RELEASE_NOTES_1.3.0.md)
+- Release: `v1.4.0`
+- Release notes: [.github/RELEASE_NOTES_1.4.0.md](.github/RELEASE_NOTES_1.4.0.md)
 
 ## License
 

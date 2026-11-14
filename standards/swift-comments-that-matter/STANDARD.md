@@ -26,6 +26,14 @@ its behavior; consumers may only see the declaration and rendered documentation.
 Use `///` for symbol documentation and `//` for implementation-local rationale.
 See [DocC guidance](docs/docc-guidance.md) for placement and syntax.
 
+## Tooling Comments And Required Notices
+
+Comments consumed by tools or required notices are not ordinary prose. Preserve
+lint/formatter directives, generator markers, and license/copyright headers during
+editorial cleanup. If a change to one is explicitly in scope, check its syntax,
+placement, and affected region against the relevant configuration or generator;
+do not remove it merely because it lacks explanatory value.
+
 ## Evidence And Scope
 
 Verify claims against implementation, callers, tests, or maintained external
@@ -38,6 +46,10 @@ Refactor-first is a decision rule, not permission to expand the task. In a
 comment-only review, propose code changes separately; apply them when they fit
 the authorized scope. Flag correctness bugs rather than documenting them as
 intentional behavior.
+
+Return actionable findings by default; include unchanged comments only when useful
+or when the user requests a complete inventory. Separate verified errors, optional
+wording improvements, and unresolved evidence gaps.
 
 ## Contract Hierarchy
 
